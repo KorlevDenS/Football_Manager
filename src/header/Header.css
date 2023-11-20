@@ -1,0 +1,24 @@
+.Header {
+    background-color: white;
+    height: 80px;
+    position: sticky;
+    display: flex;
+    width: 100%;
+}
+
+.settings_icons {
+    position: absolute;
+    height: 60%;
+    top: 20%;
+    right: 2.5%;
+    display: flex;
+    max-width: 100%;
+}
+
+.settings_img {
+    height: 100%;
+}
+
+#settings {
+    aspect-ratio: 1.75 / 1;
+}

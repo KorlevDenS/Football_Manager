@@ -1,0 +1,13 @@
+.Timetable {
+    background-color: darkgoldenrod;
+    display: flex;
+}
+
+.DayLayout {
+    width: 14.28%;
+    border:1px solid black;
+}
+
+.time_nav {
+
+}

@@ -1,0 +1,36 @@
+.NavBar {
+    background-color: aquamarine;
+    float: right;
+    width: 15rem;
+    height: 100vh;
+    position: sticky;
+    display: flex;
+    flex-direction: column;
+}
+
+.ball {
+    height: 100%;
+}
+
+#ball {
+    background-color: white;
+    height: 120px;
+    width: 100%;
+    margin-top: 10%;
+    margin-bottom: 10%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .ball {
+        animation: App-logo-spin infinite 20s linear;
+    }
+}
+
+@keyframes App-logo-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}

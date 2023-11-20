@@ -1,9 +1,10 @@
 .App {
   text-align: center;
+  display: flex;
 }
 
 .App-logo {
-  height: 40vmin;
+  height: 20vmin;
   pointer-events: none;
 }
 
@@ -14,7 +15,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: bisque;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
