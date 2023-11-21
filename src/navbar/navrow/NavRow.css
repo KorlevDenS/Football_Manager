@@ -13,6 +13,9 @@
     margin-left: 5%;
     margin-right: 5%;
 
+    cursor: pointer;
+    -webkit-user-select: none;
+
 }
 
 .icon-layout {

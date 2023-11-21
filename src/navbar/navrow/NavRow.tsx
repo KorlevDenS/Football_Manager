@@ -2,13 +2,15 @@ import './NavRow.css';
 
 interface NavRowProps {
     inlineText: string;
+    name: string;
     icon_url: string;
-    goTo() : void;
+    onChange(selectedSection: string): void;
 }
-export default function NavRow({inlineText, icon_url, goTo} : NavRowProps) {
+
+export default function NavRow({inlineText, name, icon_url, onChange} : NavRowProps) {
 
     return (
-      <div className='NavRow' onClick={goTo}>
+      <div className='NavRow' onClick={() =>onChange(name)}>
 
               <div className='icon-layout'>
                   <img className='nav_icon' src={icon_url} alt=""/>
