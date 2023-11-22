@@ -2,6 +2,7 @@ import './Timetable.css';
 import right_arrow from '../../images/rightarrow.png';
 import left_arrow from '../../images/arrowpointingleft.png';
 import {useRef, useState} from "react";
+import EventLayout from "../events/EventLayout";
 
 
 export default function Timetable() {
@@ -72,6 +73,8 @@ function DaysLayout({day}: DaysLayoutProps) {
         <div ref={ref} id='cell' className='DayLayout' style={{ backgroundColor: active ? "rgb(240,246,255)" : "" }}>
             {day?.getDate()}, {weekDays[day?.getDay()]}
             <hr className='separator'/>
+            <EventLayout/>
+            <EventLayout/>
         </div>
     );
 }

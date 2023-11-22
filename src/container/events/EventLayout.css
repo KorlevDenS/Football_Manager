@@ -1,0 +1,8 @@
+.EventLayout {
+    width: 92%;
+    margin: 4%;
+    background-color: lightgray;
+    border-radius: 10%;
+    border: 1px solid black;
+    height: 150px;
+}
