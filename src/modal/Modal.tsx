@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import type { MouseEventHandler } from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
+import type {MouseEventHandler} from "react";
 
-import Portal, { createContainer } from "./Portal";
+import Portal, {createContainer} from "./Portal";
 
 import './Modal.css';
 
@@ -14,19 +14,19 @@ type Props = {
 };
 
 const Modal = (props: Props) => {
-    const { title, onClose, children } = props;
+    const {title, onClose, children} = props;
 
     const rootRef = useRef<HTMLDivElement>(null);
     const [isMounted, setMounted] = useState(false);
 
     useEffect(() => {
-        createContainer({ id: MODAL_CONTAINER_ID });
+        createContainer({id: MODAL_CONTAINER_ID});
         setMounted(true);
     }, []);
 
     useEffect(() => {
         const handleWrapperClick = (event: MouseEvent) => {
-            const { target } = event;
+            const {target} = event;
 
             if (target instanceof Node && rootRef.current === target) {
                 onClose?.();

@@ -5,35 +5,20 @@ import MainPage from "./mainpage/MainPage";
 import Statistics from "./statistics/Statistics";
 import Exercises from "./exersises/Exercises";
 import Events from "./events/Events";
+import {Routes, Route} from "react-router-dom";
 
-
-interface ContainerProps {
-    selectedSection: string;
-}
-
-export default function Container({selectedSection}: ContainerProps) {
-
-    const renderSelectedSection = (section: string) => {
-        switch (section) {
-            case "Timetable":
-                return <Timetable/>;
-            case "MainPage":
-                return <MainPage/>;
-            case "Statistics":
-                return <Statistics/>;
-            case "Exercises":
-                return <Exercises/>;
-            case "Events":
-                return <Events/>;
-            default:
-                return <div>ERROR</div>
-        }
-    }
+export default function Container() {
 
     return (
-      <div className="Container">
-          <Header/>
-          {renderSelectedSection(selectedSection)}
-      </div>
+        <div className="Container">
+            <Header/>
+            <Routes>
+                <Route path="MainPage" element={<MainPage/>}/>
+                <Route path="Timetable" element={<Timetable/>}/>
+                <Route path="Exercises" element={<Exercises/>}/>
+                <Route path="Events" element={<Events/>}/>
+                <Route path="Statistics" element={<Statistics/>}/>
+            </Routes>
+        </div>
     );
 }

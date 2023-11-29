@@ -64,9 +64,11 @@ export default function MainPage() {
             <header className="App-header">
                 <button onClick={showTable}>Show clients list</button>
                 <form onSubmit={handleSubmit}>
-                    <input type={"text"} placeholder={"Enter name"} name={"name"} onChange={handleChange} required={true}/>
+                    <input type={"text"} placeholder={"Enter name"} name={"name"} onChange={handleChange}
+                           required={true}/>
                     <br/>
-                    <input type={"text"} placeholder={"Enter email"} name={"email"} onChange={handleChange} required={true}/>
+                    <input type={"text"} placeholder={"Enter email"} name={"email"} onChange={handleChange}
+                           required={true}/>
                     <br/>
                     <button type={"submit"}>ADD</button>
                 </form>
@@ -74,7 +76,8 @@ export default function MainPage() {
                     <h2>Clients</h2>
                     {(clients as Client[]).map(client =>
                         <div key={client.id}>
-                            {client.id} {client.name} ({client.email}) <button onClick={() => remove(client.id)}>remove</button>
+                            {client.id} {client.name} ({client.email}) <button
+                            onClick={() => remove(client.id)}>remove</button>
                         </div>
                     )}
                 </div>

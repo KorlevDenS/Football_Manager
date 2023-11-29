@@ -28,7 +28,6 @@ export default function Timetable() {
     let week: Date[] = calcWeek(weekOffset);
 
 
-
     return (
         <div className='Timetable'>
             <TimeNav monday={week[0]} sunday={week[6]} incDecZeroOffset={incDecZeroOffset}/>
@@ -54,12 +53,13 @@ enum Actions {
 interface DaysLayoutProps {
     day: Date;
 }
+
 function DaysLayout({day}: DaysLayoutProps) {
     const ref = useRef(null);
 
-    let weekDays = ["Вс","Пн","Вт","Ср","Чт","Пт","Сб"];
+    let weekDays = ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"];
 
-    let active = 0;
+    let active;
 
     if ((day.getDate() == (new Date()).getDate())
         && (day.getMonth() == (new Date()).getMonth())
@@ -70,7 +70,7 @@ function DaysLayout({day}: DaysLayoutProps) {
     }
 
     return (
-        <div ref={ref} id='cell' className='DayLayout' style={{ backgroundColor: active ? "rgb(240,246,255)" : "" }}>
+        <div ref={ref} id='cell' className='DayLayout' style={{backgroundColor: active ? "rgb(240,246,255)" : ""}}>
             {day?.getDate()}, {weekDays[day?.getDay()]}
             <hr className='separator'/>
             <EventLayout/>
@@ -82,10 +82,11 @@ function DaysLayout({day}: DaysLayoutProps) {
 interface TimeNavProps {
     monday: Date;
     sunday: Date;
+
     incDecZeroOffset(action: Actions): void;
 }
 
-function TimeNav({monday, sunday, incDecZeroOffset} : TimeNavProps) {
+function TimeNav({monday, sunday, incDecZeroOffset}: TimeNavProps) {
 
     let months = ["января", "февраля", "марта", "апреля", "мая", "июня",
         "июля", "августа", "сентября", "октября", "ноября", "декабря"];
@@ -106,20 +107,20 @@ function TimeNav({monday, sunday, incDecZeroOffset} : TimeNavProps) {
     }
 
     return (
-      <div className='time_nav'>
-          <div className='current-week' onClick={() => incDecZeroOffset(Actions.SET_TO_ZERO_OFFSET)}>
-              Текущая неделя
-          </div>
-          <div className='arrow' onClick={() => incDecZeroOffset(Actions.DEC_OFFSET)}>
-              <img src={left_arrow}  alt='prev'/>
-          </div>
-          <div className='arrow'>
-              <img src={right_arrow}  alt='next' onClick={() => incDecZeroOffset(Actions.INC_OFFSET)}/>
-          </div>
-          <div>
-              {monday?.getDate()}{ending_month_name}{ending_year} - {sunday?.getDate()} {month_name} {year} г.
-          </div>
-      </div>
+        <div className='time_nav'>
+            <div className='current-week' onClick={() => incDecZeroOffset(Actions.SET_TO_ZERO_OFFSET)}>
+                Текущая неделя
+            </div>
+            <div className='arrow' onClick={() => incDecZeroOffset(Actions.DEC_OFFSET)}>
+                <img src={left_arrow} alt='prev'/>
+            </div>
+            <div className='arrow'>
+                <img src={right_arrow} alt='next' onClick={() => incDecZeroOffset(Actions.INC_OFFSET)}/>
+            </div>
+            <div>
+                {monday?.getDate()}{ending_month_name}{ending_year} - {sunday?.getDate()} {month_name} {year} г.
+            </div>
+        </div>
     );
 }
 

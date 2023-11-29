@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { createPortal } from "react-dom";
+import React, {useEffect, useState} from "react";
+import {createPortal} from "react-dom";
 
 type containerOptions = {
     id: string;
@@ -10,7 +10,7 @@ const createContainer = (options: containerOptions) => {
         return;
     }
 
-    const { id, mountNode = document.body } = options;
+    const {id, mountNode = document.body} = options;
 
     const portalContainer = document.createElement("div");
     portalContainer.setAttribute("id", id);
@@ -24,7 +24,7 @@ type PortalProps = {
     children: React.ReactNode;
 };
 const Portal = (props: PortalProps) => {
-    const { id, children } = props;
+    const {id, children} = props;
     const [container, setContainer] = useState<HTMLElement>();
 
     useEffect(() => {
@@ -42,5 +42,5 @@ const Portal = (props: PortalProps) => {
     return container ? createPortal(children, container) : null;
 };
 
-export { createContainer, PORTAL_ERROR_MSG };
+export {createContainer, PORTAL_ERROR_MSG};
 export default Portal;
