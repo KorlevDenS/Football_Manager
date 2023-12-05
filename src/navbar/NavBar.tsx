@@ -7,9 +7,12 @@ import timetable from '../images/timetable.png';
 import stat from '../images/stat.png';
 import NavRow from "./navrow/NavRow";
 
-import React from 'react';
+import {useNavigate} from "react-router-dom";
 
 export default function NavBar() {
+    const navigate = useNavigate();
+    const parentPath = "manager/";
+
 
     return (
         <div className="NavBar">
@@ -18,11 +21,11 @@ export default function NavBar() {
                     <img src={ball} className="ball" alt="logo"/>
                 </div>
             </div>
-            <NavRow inlineText={"Главная"} icon_url={stadium} name={"MainPage"}/>
-            <NavRow inlineText={"Расписание"} icon_url={timetable} name={"Timetable"}/>
-            <NavRow inlineText={"События"} icon_url={event} name={"Events"}/>
-            <NavRow inlineText={"Упражнения"} icon_url={player} name={"Exercises"}/>
-            <NavRow inlineText={"Статистика"} icon_url={stat} name={"Statistics"}/>
+            <NavRow inlineText={"Главная"} icon_url={stadium} name={parentPath + "MainPage"}/>
+            <NavRow inlineText={"Расписание"} icon_url={timetable} name={parentPath + "Timetable"}/>
+            <NavRow inlineText={"События"} icon_url={event} name={parentPath + "Events"}/>
+            <NavRow inlineText={"Упражнения"} icon_url={player} name={parentPath + "Exercises"}/>
+            <NavRow inlineText={"Статистика"} icon_url={stat} name={parentPath + "Statistics"}/>
         </div>
     );
 }

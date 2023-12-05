@@ -5,9 +5,21 @@ import MainPage from "./mainpage/MainPage";
 import Statistics from "./statistics/Statistics";
 import Exercises from "./exersises/Exercises";
 import Events from "./events/Events";
-import {Routes, Route} from "react-router-dom";
+import {Routes, Route, Outlet, useNavigate} from "react-router-dom";
+import React from "react";
+import Profile from "./profile/Profile";
 
-export default function Container() {
+interface ContainerProps {
+    setLoggedIn(isLoggedIn: boolean): void;
+}
+export default function Container({setLoggedIn}: ContainerProps) {
+    const navigate = useNavigate();
+
+
+    const goTo = (to: string) => {
+        navigate(to, {replace: false});
+    }
+
 
     return (
         <div className="Container">
@@ -18,7 +30,9 @@ export default function Container() {
                 <Route path="Exercises" element={<Exercises/>}/>
                 <Route path="Events" element={<Events/>}/>
                 <Route path="Statistics" element={<Statistics/>}/>
+                <Route path="Profile" element={<Profile setLoggedIn={setLoggedIn}/>}/>
             </Routes>
+            <Outlet/>
         </div>
     );
 }

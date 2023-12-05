@@ -11,7 +11,9 @@ export default function NavRow({inlineText, name, icon_url}: NavRowProps) {
     const navigate = useNavigate();
 
     return (
-        <div className='NavRow' onClick={() => navigate(name, {replace: false})}>
+        <div className='NavRow' onClick={() => {
+            navigate(name, {replace: false});
+        }}>
 
             <div className='icon-layout'>
                 <img className='nav_icon' src={icon_url} alt=""/>

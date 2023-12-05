@@ -91,3 +91,6 @@ export default App;
 
 
 "proxy": "http://localhost:8080",
+
+
+<Button label="Clear" icon="pi pi-times" onClick={() => setDates(null)}/>

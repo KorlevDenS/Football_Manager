@@ -1,0 +1,13 @@
+.EventAddForm {
+    display: flex;
+    flex-direction: row;
+}
+
+.event-add-form-part {
+    display: flex;
+    flex-direction: column;
+}
+
+.event-add-form-part * {
+
+}

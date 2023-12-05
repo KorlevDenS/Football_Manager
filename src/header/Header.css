@@ -21,4 +21,14 @@
 
 #settings {
     aspect-ratio: 1.75 / 1;
+    cursor: pointer;
+}
+
+#profile {
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+#profile:hover, #settings:hover {
+    background: rgb(242, 242, 242);
 }

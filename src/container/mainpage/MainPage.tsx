@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 
 
 class Client {
@@ -9,6 +9,7 @@ class Client {
 
 export default function MainPage() {
     const [clients, setClients] = useState([]);
+    const [email, setEmail] = useState("");
 
     const [form, setForm] = useState({
         name: '',
@@ -59,16 +60,46 @@ export default function MainPage() {
         await showTable();
     }
 
+    const findById = async (email : string) => {
+        try {
+            const response = await fetch(`/clients/${email}`, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(email),
+            });
+
+            const data = await response.json();
+            console.log(data.id + " " + data.name + " " + data.email)
+        } catch (error) {
+            console.log("Couldn't find data with email: " + email);
+        }
+
+
+    }
+
+    useEffect(() => {
+        showTable();
+    }, []);
+
     return (
         <div className="App">
             <header className="App-header">
                 <button onClick={showTable}>Show clients list</button>
+
+                <input type={"text"} placeholder={"Enter email to find"} required
+                       onChange={(e) => setEmail(e.target.value)}/>
+                <button type="button" onClick={() => findById(email)}> Show with email</button>
+
+
                 <form onSubmit={handleSubmit}>
                     <input type={"text"} placeholder={"Enter name"} name={"name"} onChange={handleChange}
                            required={true}/>
                     <br/>
                     <input type={"text"} placeholder={"Enter email"} name={"email"} onChange={handleChange}
-                           required={true}/>
+                           />
                     <br/>
                     <button type={"submit"}>ADD</button>
                 </form>

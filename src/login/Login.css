@@ -1,0 +1,50 @@
+.Login {
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll;
+    display: flex;
+
+    align-items: center !important;
+    box-sizing: border-box;
+
+    background-color: #61dafb;
+}
+
+.login-form {
+    max-width: 22.5rem;
+    width: 360px;
+    max-height: 100%;
+    flex-shrink: 1;
+    margin: 4px auto;
+    flex-direction: column !important;
+    display: flex !important;
+    box-sizing: border-box;
+    border-radius: 5%;
+
+    background-color: white;
+
+}
+
+.input {
+    margin-left: auto;
+    margin-right: auto;
+    width: 300px;
+}
+
+.input .field, .input #submit {
+    margin-top: 15%;
+}
+
+#submit Button{
+    border-radius: 5px;
+}
+
+
+
+.input * :not(label, i) {
+    min-width: 100%;
+}
+
+.login-link {
+    font-size: small;
+}
