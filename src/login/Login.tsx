@@ -5,7 +5,6 @@ import {Link, Route, Routes} from "react-router-dom";
 import {Button} from "primereact/button";
 import {InputText} from "primereact/inputtext";
 import {Dropdown} from "primereact/dropdown";
-import * as dns from "dns";
 
 interface LoginProps {
     setLoggedIn(isLoggedIn: boolean): void;
@@ -56,7 +55,7 @@ function LoginForm({setLoggedIn}: LoginProps) {
 
         const data = await response.json();
         if (data.hasOwnProperty("accessToken")) {
-            localStorage.setItem("jwtToken", data);
+            localStorage.setItem("jwtToken", data.accessToken);
             localStorage.setItem("loggedIn", "true");
             setLoggedIn(true);
         } else if (data.hasOwnProperty("exception")) {
@@ -119,7 +118,7 @@ function RegistrationForm({setLoggedIn}: LoginProps) {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         let date = new Date()
-        let user = new UserConfig(username, password, login, role, "ru", "init", date);
+        let user = new UserConfig(username, password, login, role, date);
 
 
         const response = await fetch(`/user/register/${username}`, {
@@ -133,7 +132,7 @@ function RegistrationForm({setLoggedIn}: LoginProps) {
 
         const data = await response.json();
         if (data.hasOwnProperty("accessToken")) {
-            localStorage.setItem("jwtToken", data);
+            localStorage.setItem("jwtToken", data.accessToken);
             localStorage.setItem("loggedIn", "true");
             setLoggedIn(true);
         } else if (data.hasOwnProperty("exception")) {
@@ -192,18 +191,14 @@ class UserConfig {
     password: string;
     login: string;
     role: string;
-    lang: string;
-    theme: string;
     reg_date: Date;
 
     constructor(username: string, password: string, login: string,
-                role: string, lang: string, theme: string, reg_date: Date) {
+                role: string, reg_date: Date) {
         this.username = username;
         this.password = password;
         this.login = login;
         this.role = role;
-        this.lang = lang;
-        this.theme = theme;
         this.reg_date = reg_date;
     }
 

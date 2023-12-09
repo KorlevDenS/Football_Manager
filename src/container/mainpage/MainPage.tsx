@@ -77,7 +77,6 @@ export default function MainPage() {
             console.log("Couldn't find data with email: " + email);
         }
 
-
     }
 
     useEffect(() => {

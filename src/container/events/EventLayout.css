@@ -1,8 +1,32 @@
 .EventLayout {
     width: 92%;
     margin: 4%;
-    background-color: lightgray;
+    background-color: white;
     border-radius: 10%;
     border: 1px solid black;
     height: 150px;
+    display: flex;
+    flex-direction: column;
+    color: darkblue;
+    text-align: left;
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+#period {
+    text-align: center;
+}
+
+#title {
+    font-size: large;
+    font-weight: bold;
+    margin-bottom: 5%;
+}
+
+#description {
+    font-size: small;
+}
+
+#address {
+    font-size: small;
 }

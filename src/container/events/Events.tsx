@@ -6,11 +6,14 @@ import {Dialog} from "primereact/dialog";
 import EventAddForm from "./EventAddForm";
 import {Button} from "primereact/button";
 
+interface EventAddProps {
+    setLoggedIn(loggedIn: boolean): void;
+}
 
-export default function Events() {
+export default function Events({setLoggedIn}: EventAddProps) {
     return (
         <div className='Events'>
-            <EventNav/>
+            <EventNav setLoggedIn={setLoggedIn}/>
             <EventItem/>
             <EventItem/>
             <EventItem/>
@@ -33,7 +36,7 @@ function EventItem() {
     );
 }
 
-function EventNav() {
+function EventNav({setLoggedIn}: EventAddProps) {
     const [isModalActive, setModalActive] = useState(false);
 
     return (
@@ -43,7 +46,7 @@ function EventNav() {
             </button>
             <Dialog header="Добавление нового события" visible={isModalActive}
                     onHide={() => setModalActive(false)}>
-                <EventAddForm/>
+                <EventAddForm setModalActive={setModalActive} setLoggedIn={setLoggedIn}/>
             </Dialog>
         </div>
     );

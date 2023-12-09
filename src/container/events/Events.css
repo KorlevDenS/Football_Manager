@@ -5,7 +5,8 @@
 }
 
 .event-item {
-    width: 14.28%;
+    //width: 14.28%;
+    width: 180px;
 }
 
 .event-nav {

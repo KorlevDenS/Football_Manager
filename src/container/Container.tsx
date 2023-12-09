@@ -28,7 +28,7 @@ export default function Container({setLoggedIn}: ContainerProps) {
                 <Route path="MainPage" element={<MainPage/>}/>
                 <Route path="Timetable" element={<Timetable/>}/>
                 <Route path="Exercises" element={<Exercises/>}/>
-                <Route path="Events" element={<Events/>}/>
+                <Route path="Events" element={<Events setLoggedIn={setLoggedIn}/>}/>
                 <Route path="Statistics" element={<Statistics/>}/>
                 <Route path="Profile" element={<Profile setLoggedIn={setLoggedIn}/>}/>
             </Routes>
