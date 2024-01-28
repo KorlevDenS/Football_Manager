@@ -1,12 +1,25 @@
 import './Timetable.css';
 import right_arrow from '../../images/rightarrow.png';
 import left_arrow from '../../images/arrowpointingleft.png';
-import {useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import EventLayout from "../events/EventLayout";
+import {CollectiveEvent} from "../../db_classes";
 
+enum Actions {
+    INC_OFFSET,
+    DEC_OFFSET,
+    SET_TO_ZERO_OFFSET
+}
 
-export default function Timetable() {
+interface TimeTableProps {
+    setLoggedIn(loggedIn: boolean): void;
+}
+
+export default function Timetable({setLoggedIn}: TimeTableProps) {
     const [weekOffset, setWeekOffset] = useState(0);
+    const [events, setEvents] = useState<CollectiveEvent[]>([]);
+    const [eventsSchedule, setEventsSchedule] = useState<Array<Array<CollectiveEvent>>>([]);
+    const [week, setWeek] = useState<Date[]>(calcWeek(weekOffset));
 
     const incDecZeroOffset = (action: Actions) => {
         switch (action) {
@@ -25,45 +38,89 @@ export default function Timetable() {
     }
 
 
-    let week: Date[] = calcWeek(weekOffset);
+    useEffect(() => {
+        let weekNow = calcWeek(weekOffset);
+        setWeek(weekNow);
+        const begin = weekNow[0].getDate() + '.' + (weekNow[0].getMonth() + 1) + '.' + weekNow[0].getFullYear();
+        const end = weekNow[6].getDate() + '.' + (weekNow[6].getMonth() + 1) + '.' + weekNow[6].getFullYear();
+        getEventsByTimePeriod(begin, end);
+    }, [weekOffset]);
+
+
+    const formWeekSchedule = (events: CollectiveEvent[]) => {
+        let schedule: CollectiveEvent[][] = [];
+        for (let i = 0; i < 7; i++) {
+            let arr: CollectiveEvent[] = [];
+            console.log(i);
+            for (let j = 0; j < events.length; j++) {
+                if (new Date(events[j].date).getDay() === i) arr.push(events[j]);
+            }
+            schedule.push(arr);
+        }
+        console.log(schedule);
+        return schedule;
+    }
+
+
+    const getEventsByTimePeriod = async (begin: string, end: string) => {
+        let token = localStorage.getItem("jwtToken");
+        await fetch(`/new/event/get/${begin}/${end}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': token != null ? token : "",
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+            .then( response => {
+                    if (response.ok) {
+                        const data = response.json();
+
+                        let eventsArray: CollectiveEvent[];
+                        data.then(value => {eventsArray = value as CollectiveEvent[]})
+                            .then(() => setEvents(eventsArray
+                                .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+                            )).then(() => setEventsSchedule(formWeekSchedule(eventsArray)));
+                    } else if (response.status === 401) {
+                        setLoggedIn(false);
+                        localStorage.setItem("loggedIn", "false");
+                    }
+                }
+            );
+    }
 
 
     return (
         <div className='Timetable'>
             <TimeNav monday={week[0]} sunday={week[6]} incDecZeroOffset={incDecZeroOffset}/>
             <div className='table-body'>
-                <DaysLayout day={week[0]}/>
-                <DaysLayout day={week[1]}/>
-                <DaysLayout day={week[2]}/>
-                <DaysLayout day={week[3]}/>
-                <DaysLayout day={week[4]}/>
-                <DaysLayout day={week[5]}/>
-                <DaysLayout day={week[6]}/>
+                <DaysLayout day={week[0]} dayEvents={eventsSchedule[1]}/>
+                <DaysLayout day={week[1]} dayEvents={eventsSchedule[2]}/>
+                <DaysLayout day={week[2]} dayEvents={eventsSchedule[3]}/>
+                <DaysLayout day={week[3]} dayEvents={eventsSchedule[4]}/>
+                <DaysLayout day={week[4]} dayEvents={eventsSchedule[5]}/>
+                <DaysLayout day={week[5]} dayEvents={eventsSchedule[6]}/>
+                <DaysLayout day={week[6]} dayEvents={eventsSchedule[0]}/>
             </div>
         </div>
     );
 }
 
-enum Actions {
-    INC_OFFSET,
-    DEC_OFFSET,
-    SET_TO_ZERO_OFFSET
-}
-
 interface DaysLayoutProps {
     day: Date;
+    dayEvents: Array<CollectiveEvent>;
 }
 
-function DaysLayout({day}: DaysLayoutProps) {
+function DaysLayout({day, dayEvents}: DaysLayoutProps) {
     const ref = useRef(null);
 
     let weekDays = ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"];
 
     let active;
 
-    if ((day.getDate() == (new Date()).getDate())
-        && (day.getMonth() == (new Date()).getMonth())
-        && (day.getFullYear() == (new Date()).getFullYear())) {
+    if ((day.getDate() === (new Date()).getDate())
+        && (day.getMonth() === (new Date()).getMonth())
+        && (day.getFullYear() === (new Date()).getFullYear())) {
         active = 1;
     } else {
         active = 0;
@@ -73,8 +130,9 @@ function DaysLayout({day}: DaysLayoutProps) {
         <div ref={ref} id='cell' className='DayLayout' style={{backgroundColor: active ? "rgb(240,246,255)" : ""}}>
             {day?.getDate()}, {weekDays[day?.getDay()]}
             <hr className='separator'/>
-            <EventLayout/>
-            <EventLayout/>
+            {dayEvents?.map(event =>
+                <EventLayout event={event}/>
+            )}
         </div>
     );
 }
@@ -98,11 +156,11 @@ function TimeNav({monday, sunday, incDecZeroOffset}: TimeNavProps) {
 
 
     month_name = months[sunday.getMonth()];
-    if (monday.getMonth() != sunday.getMonth()) {
+    if (monday.getMonth() !== sunday.getMonth()) {
         ending_month_name = " " + months[monday.getMonth()];
     }
     year = sunday.getFullYear();
-    if (monday.getFullYear() != sunday.getFullYear()) {
+    if (monday.getFullYear() !== sunday.getFullYear()) {
         ending_year = " " + monday.getFullYear();
     }
 
@@ -132,7 +190,7 @@ function calcWeek(offset: number): Date[] {
     let weekDayNumber = currentDate.getDay();
 
     let day = new Date();
-    if (weekDayNumber == 0) {
+    if (weekDayNumber === 0) {
         day.setDate(currentDate.getDate() - 6);
     } else {
         day.setDate(currentDate.getDate() - weekDayNumber + 1);

@@ -6,13 +6,18 @@ import {InputText} from "primereact/inputtext";
 import {InputNumber} from "primereact/inputnumber";
 import {InputTextarea} from "primereact/inputtextarea";
 import {Button} from "primereact/button";
+import {AddUserEventRequest, CollectiveEvent, Custom, Match,
+    PlayerCustom, PlayerMatch, PlayerTraining, Training} from "../../db_classes";
+
+
 
 interface EventAddProps {
     setModalActive(isActive: boolean): void;
     setLoggedIn(loggedIn: boolean): void;
+    getEvents(): void;
 }
 
-export default function EventAddForm({setModalActive, setLoggedIn}: EventAddProps) {
+export default function EventAddForm({setModalActive, setLoggedIn, getEvents}: EventAddProps) {
     const [type, setType] = useState(null);
     const [name, setName] = useState("");
     const [dates, setDates]
@@ -107,13 +112,13 @@ export default function EventAddForm({setModalActive, setLoggedIn}: EventAddProp
             let collectiveEvent = new CollectiveEvent(type, location, date, sqlTime(time),
                 sqlTime(duration), description);
 
-            if (type == "Тренировка") {
+            if (type === "Тренировка") {
                 let training = new Training(trainType, playersAmount, fieldFormat);
                 let playerTraining = new PlayerTraining(myGoals, liked, disLiked, toImprove, comments);
                 addUserEventRequest = new AddUserEventRequest(collectiveEvent, null, null,
                     null, null, training, playerTraining);
 
-            } else if (type == "Матч") {
+            } else if (type === "Матч") {
                 let match = new Match(myTeam, opponentTeam, myTeamGoals, opponentTeamGoals,
                     fieldFormat, calcResult(myTeamGoals, opponentTeamGoals));
                 let playerMatch = new PlayerMatch(myGoals, sqlTime(fieldTime), role, assists,
@@ -121,7 +126,7 @@ export default function EventAddForm({setModalActive, setLoggedIn}: EventAddProp
                 addUserEventRequest = new AddUserEventRequest(collectiveEvent, null, null,
                     match, playerMatch, null, null);
 
-            } else if (type == "Своё событие") {
+            } else if (type === "Своё событие") {
                 let custom = new Custom(name);
                 let playerCustom = new PlayerCustom(liked, disLiked, toImprove, comments);
                 addUserEventRequest = new AddUserEventRequest(collectiveEvent, custom, playerCustom, null,
@@ -145,7 +150,8 @@ export default function EventAddForm({setModalActive, setLoggedIn}: EventAddProp
                         const data = response.json();
                         data.then(value => {console.log(value)});
                         setModalActive(false);
-                    } else if (response.status == 401) {
+                        getEvents();
+                    } else if (response.status === 401) {
                         setLoggedIn(false);
                         localStorage.setItem("loggedIn", "false");
                     }
@@ -260,141 +266,5 @@ export default function EventAddForm({setModalActive, setLoggedIn}: EventAddProp
             )}
         </form>
     );
-}
-
-class AddUserEventRequest {
-    collectiveEvent: CollectiveEvent;
-    custom: Custom | null;
-    playerCustom: PlayerCustom | null;
-    match: Match | null;
-    playerMatch: PlayerMatch | null;
-    training: Training | null;
-    playerTraining: PlayerTraining | null;
-
-    constructor(collectiveEvent: CollectiveEvent, custom: Custom | null, playerCustom: PlayerCustom | null,
-                match: Match | null, playerMatch: PlayerMatch | null, training: Training | null,
-                playerTraining: PlayerTraining | null) {
-        this.collectiveEvent = collectiveEvent;
-        this.custom = custom;
-        this.playerCustom = playerCustom;
-        this.match = match;
-        this.playerMatch = playerMatch;
-        this.training = training;
-        this.playerTraining = playerTraining;
-    }
-}
-
-class CollectiveEvent {
-    type: string | null | undefined;
-    location: string;
-    date: Date;
-    time: string | null | undefined;
-    duration: string | null | undefined;
-    description: string;
-
-    constructor(type: string | null | undefined, location: string, date: Date,
-                time: string | null, duration: null | string, description: string) {
-        this.type = type;
-        this.location = location;
-        this.date = date;
-        this.time = time;
-        this.duration = duration;
-        this.description = description;
-    }
-}
-
-class Match {
-    team1: string;
-    team2: string;
-    team1_goals: number | undefined | null;
-    team2_goals: number | undefined | null;
-    field_format: string;
-    result: string;
-
-    constructor(team1: string, team2: string, team1_goals: number | undefined | null,
-                team2_goals: number | undefined | null, field_format: string, result: string) {
-        this.team1 = team1;
-        this.team2 = team2;
-        this.team1_goals = team1_goals;
-        this.team2_goals = team2_goals;
-        this.field_format = field_format;
-        this.result = result;
-    }
-}
-
-class PlayerMatch {
-    goals: number | undefined | null;
-    field_time: string | null | undefined;
-    role: string | null | undefined;
-    assists: number | undefined | null;
-    what_liked: string;
-    what_disliked: string;
-    what_to_improve: string;
-    comments: string;
-
-    constructor(goals: number | undefined | null, field_time: null | string,
-                role: string | null | undefined, assists: number | undefined | null,
-                what_liked: string, what_disliked: string, what_to_improve: string, comments: string) {
-
-        this.goals = goals;
-        this.field_time = field_time;
-        this.role = role;
-        this.assists = assists;
-        this.what_liked = what_liked;
-        this.what_disliked = what_disliked;
-        this.what_to_improve = what_to_improve;
-        this.comments = comments;
-    }
-}
-
-class Training {
-    type: string;
-    players_amount: number | undefined | null;
-    field_format: string;
-
-    constructor(type: string, players_amount: number | undefined | null, field_format: string) {
-        this.type = type;
-        this.players_amount = players_amount;
-        this.field_format = field_format;
-    }
-}
-
-class PlayerTraining {
-    goals: number | undefined | null;
-    what_liked: string;
-    what_disliked: string;
-    what_to_improve: string;
-    comments: string;
-
-    constructor(goals: number | undefined | null, what_liked: string, what_disliked: string,
-                what_to_improve: string, comments: string) {
-        this.goals = goals;
-        this.what_liked = what_liked;
-        this.what_disliked = what_disliked;
-        this.what_to_improve = what_to_improve;
-        this.comments = comments;
-    }
-}
-
-class Custom {
-    name: string;
-
-    constructor(name: string) {
-        this.name = name;
-    }
-}
-
-class PlayerCustom {
-    what_liked: string;
-    what_disliked: string;
-    what_to_improve: string;
-    comments: string;
-
-    constructor(what_liked: string, what_disliked: string, what_to_improve: string, comments: string) {
-        this.what_liked = what_liked;
-        this.what_disliked = what_disliked;
-        this.what_to_improve = what_to_improve;
-        this.comments = comments;
-    }
 }
 

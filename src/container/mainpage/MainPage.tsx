@@ -26,7 +26,7 @@ export default function MainPage() {
 
     const remove = async (id: number | undefined) => {
         if (typeof id == undefined) return;
-        const checkId = (clients as Client[]).some(c => c.id == id);
+        const checkId = (clients as Client[]).some(c => c.id === id);
         if (!checkId) return;
         await fetch(`/clients/${id}`, {
             method: 'DELETE',

@@ -7,7 +7,7 @@ import Login from "../login/Login";
 
 export default function App() {
     const [loggedIn, setLoggedIn]
-        = useState(localStorage.getItem("loggedIn") == "true");
+        = useState(localStorage.getItem("loggedIn") === "true");
     const navigate = useNavigate();
 
 

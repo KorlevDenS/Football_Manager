@@ -13,20 +13,13 @@ interface ContainerProps {
     setLoggedIn(isLoggedIn: boolean): void;
 }
 export default function Container({setLoggedIn}: ContainerProps) {
-    const navigate = useNavigate();
-
-
-    const goTo = (to: string) => {
-        navigate(to, {replace: false});
-    }
-
 
     return (
         <div className="Container">
             <Header/>
             <Routes>
                 <Route path="MainPage" element={<MainPage/>}/>
-                <Route path="Timetable" element={<Timetable/>}/>
+                <Route path="Timetable" element={<Timetable setLoggedIn={setLoggedIn}/>}/>
                 <Route path="Exercises" element={<Exercises/>}/>
                 <Route path="Events" element={<Events setLoggedIn={setLoggedIn}/>}/>
                 <Route path="Statistics" element={<Statistics/>}/>

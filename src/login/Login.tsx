@@ -110,7 +110,7 @@ function RegistrationForm({setLoggedIn}: LoginProps) {
     }
 
     const checkPasswordEquals = (pass: string) => {
-        if (pass != password) {
+        if (pass !== password) {
             formErrors.repeatPassword = "Пароли не совпадают!"
         } else formErrors.repeatPassword = "";
     }
