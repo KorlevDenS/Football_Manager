@@ -4,8 +4,7 @@ import plus from "../../images/plus.png";
 import React, {useEffect, useState} from "react";
 import {Dialog} from "primereact/dialog";
 import EventAddForm from "./EventAddForm";
-import {AddUserEventRequest, CollectiveEvent, Custom, Match,
-    PlayerCustom, PlayerMatch, PlayerTraining, Training} from "../../db_classes";
+import {CollectiveEvent} from "../../db_classes";
 
 interface EventAddProps {
     setLoggedIn(loggedIn: boolean): void;

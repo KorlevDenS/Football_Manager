@@ -21,6 +21,7 @@ export class AddUserEventRequest {
 }
 
 export class CollectiveEvent {
+    id: number | undefined;
     type: string | null | undefined;
     location: string;
     date: Date;

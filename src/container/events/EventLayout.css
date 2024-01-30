@@ -11,6 +11,56 @@
     text-align: left;
     padding-left: 5%;
     padding-right: 5%;
+    -webkit-user-select: none;
+    cursor: pointer;
+}
+
+.EventLayout:hover {
+    background: rgb(242, 242, 242);
+}
+
+.event_info {
+    height: 400px;
+    width: 400px;
+    background-color: white;
+    position: relative;
+    margin: 0 auto;
+    top: 25%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+#close-modal {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.modal_container {
+    overflow-y: scroll;
+}
+
+#info-container {
+
+}
+
+#info-navigate {
+    margin-top: auto;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+#left-button {
+    width: 50%;
+    display: flex;
+    flex-direction: row;
+}
+
+#right-button {
+    width: 50%;
+    display: flex;
+    flex-direction: row-reverse;
 }
 
 #period {

@@ -1,4 +1,6 @@
 import React, {useEffect, useState} from "react";
+import Button from '@mui/material/Button';
+import './MainPage.css';
 
 
 class Client {
@@ -86,11 +88,11 @@ export default function MainPage() {
     return (
         <div className="App">
             <header className="App-header">
-                <button onClick={showTable}>Show clients list</button>
+                <Button variant="contained" sx={{color: 'black', background: 'aqua'}} className={"mainB"} onClick={showTable}>Show clients list</Button>
 
                 <input type={"text"} placeholder={"Enter email to find"} required
                        onChange={(e) => setEmail(e.target.value)}/>
-                <button type="button" onClick={() => findById(email)}> Show with email</button>
+                <Button type="button" onClick={() => findById(email)}> Show with email</Button>
 
 
                 <form onSubmit={handleSubmit}>
@@ -100,7 +102,7 @@ export default function MainPage() {
                     <input type={"text"} placeholder={"Enter email"} name={"email"} onChange={handleChange}
                            />
                     <br/>
-                    <button type={"submit"}>ADD</button>
+                    <Button type={"submit"}>ADD</Button>
                 </form>
                 <div className="App-intro">
                     <h2>Clients</h2>
