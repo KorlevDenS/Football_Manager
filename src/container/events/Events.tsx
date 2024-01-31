@@ -21,7 +21,7 @@ export default function Events({setLoggedIn}: EventAddProps) {
 
     const getEvents = async () => {
         let token = localStorage.getItem("jwtToken");
-        await fetch(`/new/event/get`, {
+        await fetch(`/event/get/collective/events`, {
             method: 'GET',
             headers: {
                 'Authorization': token != null ? token : "",

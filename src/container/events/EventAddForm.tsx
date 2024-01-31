@@ -137,7 +137,7 @@ export default function EventAddForm({setModalActive, setLoggedIn, getEvents}: E
             }
 
             let token = localStorage.getItem("jwtToken");
-            const response = await fetch(`/new/event/add`, {
+            const response = await fetch(`/event/add/new`, {
                 method: 'POST',
                 headers: {
                     'Authorization': token != null ? token : "",

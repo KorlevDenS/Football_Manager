@@ -64,7 +64,7 @@ export default function Timetable({setLoggedIn}: TimeTableProps) {
 
     const getEventsByTimePeriod = async (begin: string, end: string) => {
         let token = localStorage.getItem("jwtToken");
-        await fetch(`/new/event/get/${begin}/${end}`, {
+        await fetch(`/event/get/collective/events/${begin}/${end}`, {
             method: 'GET',
             headers: {
                 'Authorization': token != null ? token : "",

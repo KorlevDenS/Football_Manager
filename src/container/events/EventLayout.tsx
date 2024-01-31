@@ -1,14 +1,16 @@
 import { CollectiveEvent } from '../../db_classes';
 import './EventLayout.css';
 import React, {useState} from "react";
-import {Box, Modal} from "@mui/material";
+import {Modal} from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
 import Button from "@mui/material/Button";
 
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import {InputText} from "primereact/inputtext";
+import EventInfo from "./EventInfo";
+import EventProcess from "./EventProcess";
+import EventSelfInfo from "./EventSelfInfo";
 
 
 interface EventLayoutProps {
@@ -65,79 +67,60 @@ export default function EventLayout({event}: EventLayoutProps) {
                     </div>
                     <div id={"info-container"}>
                         {information == infos[0] && (
-                            <>
-                                INFO
-                            </>
+                            <EventInfo event={event}/>
                         )}
                         {information == infos[1] && (
-                            <>
-                                PROCESS
-                            </>
+                            <EventProcess event={event}/>
                         )}
                         {information == infos[2] && (
-                            <>
-                                SELF_INFO
-                            </>
+                            <EventSelfInfo event={event}/>
                         )}
 
                     </div>
                     <div id={"info-navigate"}>
                         {information == infos[0] && (
-                            <>
-                                <div id={"left-button"}>
-                                    <Button onClick={() => setInformation(infos[2])} startIcon={<ArrowBackIosIcon/>}>
-                                        Личная оценка
-                                    </Button>
-                                </div>
-                                <div id={"right-button"}>
-                                    <Button onClick={() => setInformation(infos[1])} endIcon={<ArrowForwardIosIcon/>}>
-                                        Процесс
-                                    </Button>
-                                </div>
-                            </>
+                            <InfoNav leftType={infos[2]} leftText={"Личная оценка"} rightType={infos[1]}
+                                     rightText={"Процесс"} setInformation={setInformation}/>
                         )}
                         {information == infos[1] && (
-                            <>
-                                <div id={"left-button"}>
-                                    <Button onClick={() => setInformation(infos[0])} startIcon={<ArrowBackIosIcon/>}>
-                                        Информация
-                                    </Button>
-                                </div>
-                                <div id={"right-button"}>
-                                    <Button onClick={() => setInformation(infos[2])} endIcon={<ArrowForwardIosIcon/>}>
-                                        Личная оценка
-                                    </Button>
-                                </div>
-                            </>
+                            <InfoNav leftType={infos[0]} leftText={"Информация"} rightType={infos[2]}
+                                     rightText={"Личная оценка"} setInformation={setInformation}/>
                         )}
                         {information == infos[2] && (
-                            <>
-                                <div id={"left-button"}>
-                                    <Button onClick={() => setInformation(infos[1])} startIcon={<ArrowBackIosIcon/>}>
-                                        Процесс
-                                    </Button>
-                                </div>
-                                <div id={"right-button"}>
-                                    <Button onClick={() => setInformation(infos[0])} endIcon={<ArrowForwardIosIcon/>}>
-                                        Информация
-                                    </Button>
-                                </div>
-                            </>
+                            <InfoNav leftType={infos[1]} leftText={"Процесс"} rightType={infos[0]}
+                                     rightText={"Информация"} setInformation={setInformation}/>
                         )}
                     </div>
                 </div>
             </Modal>
         </div>
     );
+}
+
+interface InfoNavProps {
+    leftText: string;
+    rightText: string;
+    leftType: string;
+    rightType: string;
+    setInformation(type: string): void;
 
 }
 
-function InfoNav() {
+function InfoNav({leftText, rightText, leftType, rightType, setInformation}: InfoNavProps) {
 
     return (
-        <div>
-
-        </div>
+        <>
+            <div id={"left-button"}>
+                <Button onClick={() => setInformation(leftType)} startIcon={<ArrowBackIosIcon/>}>
+                    {leftText}
+                </Button>
+            </div>
+            <div id={"right-button"}>
+                <Button onClick={() => setInformation(rightType)} endIcon={<ArrowForwardIosIcon/>}>
+                    {rightText}
+                </Button>
+            </div>
+        </>
     );
 }
 
