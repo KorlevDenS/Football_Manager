@@ -6,8 +6,11 @@ import {InputText} from "primereact/inputtext";
 import {InputNumber} from "primereact/inputnumber";
 import {InputTextarea} from "primereact/inputtextarea";
 import {Button} from "primereact/button";
-import {AddUserEventRequest, CollectiveEvent, Custom, Match,
-    PlayerCustom, PlayerMatch, PlayerTraining, Training} from "../../db_classes";
+import {
+    CollectiveEvent, Custom, CustomAddRequest, Exercise, ExercisesMatchRequest, Match, MatchAddRequest,
+    PlayerCustom, PlayerMatch, PlayerTraining, Training, TrainingAddRequest
+} from "../../db_classes";
+import {Autocomplete, TextField} from '@mui/material';
 
 
 
@@ -59,11 +62,14 @@ export default function EventAddForm({setModalActive, setLoggedIn, getEvents}: E
     const [showTrain, setShowTrain] = useState(false);
     const [showSelf, setShowSelf] = useState(false);
 
+    const [availableExercises, setAvailableExercises] = useState<Exercise[]>([])
+    const [exercises, setExercises] = useState<Exercise[]>([]);
+
 
     const types = ["Тренировка", "Матч", "Своё событие"];
     const roles = ["Вратарь", "Защитник", "Полузащитник", "Нападающий"];
 
-    function specifyForm(e: DropdownChangeEvent) {
+    async function specifyForm(e: DropdownChangeEvent) {
         switch (e.value) {
             case types[1]:
                 setShowTrain(false);
@@ -74,6 +80,31 @@ export default function EventAddForm({setModalActive, setLoggedIn, getEvents}: E
                 setShowMatch(false);
                 setShowCustom(false);
                 setShowTrain(true);
+                let token = localStorage.getItem("jwtToken");
+                await fetch(`/exercise/get/exercises`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': token != null ? token : "",
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then( response => {
+                            if (response.ok) {
+                                const data = response.json();
+                                let exercisesArray: Exercise[];
+                                data.then(value => {exercisesArray = value as Exercise[]})
+                                    .then(() => setAvailableExercises(exercisesArray
+                                        .sort((a, b) =>
+                                            (a.usage_count != null ? a.usage_count : 0) - (b.usage_count != null ? b.usage_count : 0))
+                                    ));
+                                data.then(value => {console.log(value)});
+                            } else if (response.status === 401) {
+                                setLoggedIn(false);
+                                localStorage.setItem("loggedIn", "false");
+                            }
+                        }
+                    );
                 break;
             case types[2]: {
                 setShowMatch(false);
@@ -100,66 +131,140 @@ export default function EventAddForm({setModalActive, setLoggedIn, getEvents}: E
         return time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds();
     }
 
+    const addTraining = async (collectiveEvent: CollectiveEvent) => {
+        let trainingAddRequest: TrainingAddRequest;
+        let training = new Training(trainType, playersAmount, fieldFormat);
+        let playerTraining = new PlayerTraining(myGoals, liked, disLiked, toImprove, comments);
+        trainingAddRequest = new TrainingAddRequest(collectiveEvent, training, playerTraining);
+
+        let gotTraining: Training;
+        let token = localStorage.getItem("jwtToken");
+        await fetch(`/event/add/new/training`, {
+            method: 'POST',
+            headers: {
+                'Authorization': token != null ? token : "",
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(trainingAddRequest),
+        }).then( response => {
+                if (response.ok) {
+                    const data = response.json();
+                    data.then(value => {gotTraining = value as Training})
+                        .then(() => {
+                            if (gotTraining.id !== undefined && exercises.length > 0) {
+                                let exercisesMatchRequest
+                                    = new ExercisesMatchRequest(gotTraining.id, exercises.map(obj => obj.id));
+                                let token = localStorage.getItem("jwtToken");
+                                fetch(`/exercise/to/training`, {
+                                    method: 'POST',
+                                    headers: {
+                                        'Authorization': token != null ? token : "",
+                                        'Accept': 'application/json',
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify(exercisesMatchRequest),
+                                }).then( response => {
+                                        if (response.ok) {
+                                            const data = response.json();
+                                            data.then(value => {console.log(value)});
+                                        } else if (response.status === 401) {
+                                            setLoggedIn(false);
+                                            localStorage.setItem("loggedIn", "false");
+                                        }
+                                    }
+                                );
+                            }
+                        });
+                    setModalActive(false);
+                    getEvents();
+                } else if (response.status === 401) {
+                    setLoggedIn(false);
+                    localStorage.setItem("loggedIn", "false");
+                }
+            }
+        );
+    }
+
+    const addMatch = async (collectiveEvent: CollectiveEvent) => {
+        let matchAddRequest: MatchAddRequest;
+        let match = new Match(myTeam, opponentTeam, myTeamGoals, opponentTeamGoals,
+            fieldFormat, calcResult(myTeamGoals, opponentTeamGoals));
+        let playerMatch = new PlayerMatch(myGoals, sqlTime(fieldTime), role, assists,
+            liked, disLiked, toImprove, comments);
+        matchAddRequest = new MatchAddRequest(collectiveEvent, match, playerMatch);
+
+        let token = localStorage.getItem("jwtToken");
+        await fetch(`/event/add/new/match`, {
+            method: 'POST',
+            headers: {
+                'Authorization': token != null ? token : "",
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(matchAddRequest),
+        }).then( response => {
+                if (response.ok) {
+                    const data = response.json();
+                    data.then(value => {console.log(value)});
+                    setModalActive(false);
+                    getEvents();
+                } else if (response.status === 401) {
+                    setLoggedIn(false);
+                    localStorage.setItem("loggedIn", "false");
+                }
+            }
+        );
+    }
+
+    const addCustom = async (collectiveEvent: CollectiveEvent) => {
+        let customAddRequest: CustomAddRequest;
+        let custom = new Custom(name);
+        let playerCustom = new PlayerCustom(liked, disLiked, toImprove, comments);
+        customAddRequest = new CustomAddRequest(collectiveEvent, custom, playerCustom);
+
+        let token = localStorage.getItem("jwtToken");
+        await fetch(`/event/add/new/custom`, {
+            method: 'POST',
+            headers: {
+                'Authorization': token != null ? token : "",
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(customAddRequest),
+        }).then( response => {
+                if (response.ok) {
+                    const data = response.json();
+                    data.then(value => {console.log(value)});
+                    setModalActive(false);
+                    getEvents();
+                } else if (response.status === 401) {
+                    setLoggedIn(false);
+                    localStorage.setItem("loggedIn", "false");
+                }
+            }
+        );
+    }
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
-        console.log("start" + dates);
-
+        console.log(exercises);
         if (dates == null) return;
 
         for (const date of dates) {
-            let addUserEventRequest: AddUserEventRequest;
             let collectiveEvent = new CollectiveEvent(type, location, date, sqlTime(time),
                 sqlTime(duration), description);
-
             if (type === "Тренировка") {
-                let training = new Training(trainType, playersAmount, fieldFormat);
-                let playerTraining = new PlayerTraining(myGoals, liked, disLiked, toImprove, comments);
-                addUserEventRequest = new AddUserEventRequest(collectiveEvent, null, null,
-                    null, null, training, playerTraining);
-
+                await addTraining(collectiveEvent);
             } else if (type === "Матч") {
-                let match = new Match(myTeam, opponentTeam, myTeamGoals, opponentTeamGoals,
-                    fieldFormat, calcResult(myTeamGoals, opponentTeamGoals));
-                let playerMatch = new PlayerMatch(myGoals, sqlTime(fieldTime), role, assists,
-                    liked, disLiked, toImprove, comments);
-                addUserEventRequest = new AddUserEventRequest(collectiveEvent, null, null,
-                    match, playerMatch, null, null);
-
+                await addMatch(collectiveEvent);
             } else if (type === "Своё событие") {
-                let custom = new Custom(name);
-                let playerCustom = new PlayerCustom(liked, disLiked, toImprove, comments);
-                addUserEventRequest = new AddUserEventRequest(collectiveEvent, custom, playerCustom, null,
-                    null, null, null);
+                await addCustom(collectiveEvent);
             } else {
                 console.error("Trying to add an unusual event!")
                 return;
             }
-
-            let token = localStorage.getItem("jwtToken");
-            const response = await fetch(`/event/add/new`, {
-                method: 'POST',
-                headers: {
-                    'Authorization': token != null ? token : "",
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(addUserEventRequest),
-            }).then( response => {
-                    if (response.ok) {
-                        const data = response.json();
-                        data.then(value => {console.log(value)});
-                        setModalActive(false);
-                        getEvents();
-                    } else if (response.status === 401) {
-                        setLoggedIn(false);
-                        localStorage.setItem("loggedIn", "false");
-                    }
-                }
-            );
-
         }
-
     }
 
     return (
@@ -196,6 +301,24 @@ export default function EventAddForm({setModalActive, setLoggedIn, getEvents}: E
                                  onValueChange={(e) => setPlayersAmount(e.value)}/>
                             <InputText placeholder="Вид поля" value={fieldFormat}
                                onChange={(e) => setFieldFormat(e.target.value)}/>
+
+                            <div id="tags-outlined">
+                                <Autocomplete
+                                    onChange={(event, value) => setExercises(value)}
+                                    multiple
+                                    options={availableExercises}
+                                    getOptionLabel={(option) => option.title + " " + option.technic}
+                                    filterSelectedOptions
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="Упражнения"
+                                            placeholder="В этой тренировке"
+                                        />
+                                    )}
+                                />
+                            </div>
+
                         </>
                     )}
                     {showMatch && (

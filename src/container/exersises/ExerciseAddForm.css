@@ -1,0 +1,10 @@
+.ExerciseAddForm {
+    display: flex;
+    flex-direction: row;
+}
+
+.exercise-add-form-part {
+    display: flex;
+    flex-direction: column;
+    margin: 2%;
+}

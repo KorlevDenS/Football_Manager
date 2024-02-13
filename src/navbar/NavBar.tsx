@@ -5,12 +5,10 @@ import event from '../images/event.png';
 import player from '../images/player.png';
 import timetable from '../images/timetable.png';
 import stat from '../images/stat.png';
-import NavRow from "./navrow/NavRow";
+import NavRow from "./NavRow";
 
 import {useNavigate} from "react-router-dom";
-
 export default function NavBar() {
-    const navigate = useNavigate();
     const parentPath = "manager/";
 
 

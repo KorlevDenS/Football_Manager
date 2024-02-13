@@ -1,8 +1,7 @@
 .NavBar {
-    background-color: aquamarine;
+    background-color: #1976d2;
     float: right;
     width: 240px;
-
     position: sticky;
     display: flex;
     flex-direction: column;

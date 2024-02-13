@@ -4,6 +4,8 @@ import left_arrow from '../../images/arrowpointingleft.png';
 import React, {useEffect, useRef, useState} from "react";
 import EventLayout from "../events/EventLayout";
 import {CollectiveEvent} from "../../db_classes";
+import {Route, Routes, useNavigate} from "react-router-dom";
+import EventContainer from "../events/EventContainer";
 
 enum Actions {
     INC_OFFSET,
@@ -20,6 +22,8 @@ export default function Timetable({setLoggedIn}: TimeTableProps) {
     const [events, setEvents] = useState<CollectiveEvent[]>([]);
     const [eventsSchedule, setEventsSchedule] = useState<Array<Array<CollectiveEvent>>>([]);
     const [week, setWeek] = useState<Date[]>(calcWeek(weekOffset));
+    const navigate = useNavigate();
+    const [showingEvent, setShowingEvent] = useState<CollectiveEvent>();
 
     const incDecZeroOffset = (action: Actions) => {
         switch (action) {
@@ -89,19 +93,35 @@ export default function Timetable({setLoggedIn}: TimeTableProps) {
             );
     }
 
+    const loadEventInfo = (event: CollectiveEvent) => {
+        setShowingEvent(event);
+        navigate("event/info");
+    }
 
     return (
         <div className='Timetable'>
             <TimeNav monday={week[0]} sunday={week[6]} incDecZeroOffset={incDecZeroOffset}/>
-            <div className='table-body'>
-                <DaysLayout day={week[0]} dayEvents={eventsSchedule[1]}/>
-                <DaysLayout day={week[1]} dayEvents={eventsSchedule[2]}/>
-                <DaysLayout day={week[2]} dayEvents={eventsSchedule[3]}/>
-                <DaysLayout day={week[3]} dayEvents={eventsSchedule[4]}/>
-                <DaysLayout day={week[4]} dayEvents={eventsSchedule[5]}/>
-                <DaysLayout day={week[5]} dayEvents={eventsSchedule[6]}/>
-                <DaysLayout day={week[6]} dayEvents={eventsSchedule[0]}/>
-            </div>
+            <Routes>
+                <Route index element={
+                    <div className='table-body'>
+                        <DaysLayout day={week[0]} dayEvents={eventsSchedule[1]} loadEventInfo={loadEventInfo}/>
+                        <DaysLayout day={week[1]} dayEvents={eventsSchedule[2]} loadEventInfo={loadEventInfo}/>
+                        <DaysLayout day={week[2]} dayEvents={eventsSchedule[3]} loadEventInfo={loadEventInfo}/>
+                        <DaysLayout day={week[3]} dayEvents={eventsSchedule[4]} loadEventInfo={loadEventInfo}/>
+                        <DaysLayout day={week[4]} dayEvents={eventsSchedule[5]} loadEventInfo={loadEventInfo}/>
+                        <DaysLayout day={week[5]} dayEvents={eventsSchedule[6]} loadEventInfo={loadEventInfo}/>
+                        <DaysLayout day={week[6]} dayEvents={eventsSchedule[0]} loadEventInfo={loadEventInfo}/>
+                    </div>
+                }></Route>
+                <Route path={"event/info"} element={
+                    <>
+                        {showingEvent != null && (
+                            <EventContainer event={showingEvent} setLoggedIn={setLoggedIn}
+                                            handleClose={() => navigate("/manager/Timetable")}/>
+                        )}
+                    </>
+                }></Route>
+            </Routes>
         </div>
     );
 }
@@ -109,9 +129,10 @@ export default function Timetable({setLoggedIn}: TimeTableProps) {
 interface DaysLayoutProps {
     day: Date;
     dayEvents: Array<CollectiveEvent>;
+    loadEventInfo(event: CollectiveEvent): void;
 }
 
-function DaysLayout({day, dayEvents}: DaysLayoutProps) {
+function DaysLayout({day, dayEvents, loadEventInfo}: DaysLayoutProps) {
     const ref = useRef(null);
 
     let weekDays = ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"];
@@ -127,11 +148,11 @@ function DaysLayout({day, dayEvents}: DaysLayoutProps) {
     }
 
     return (
-        <div ref={ref} id='cell' className='DayLayout' style={{backgroundColor: active ? "rgb(240,246,255)" : ""}}>
+        <div ref={ref} id='cell' className='DayLayout' style={{backgroundColor: active ? "lightcyan" : ""}}>
             {day?.getDate()}, {weekDays[day?.getDay()]}
             <hr className='separator'/>
             {dayEvents?.map(event =>
-                <EventLayout event={event}/>
+                <EventLayout event={event} loadEvenInfo={loadEventInfo}/>
             )}
         </div>
     );

@@ -8,6 +8,10 @@
     flex-direction: column;
 }
 
+#tags-outlined {
+    max-width: 400px;
+}
+
 .event-add-form-part * {
 
 }

@@ -1,0 +1,12 @@
+.exercise_info {
+    width: 100%;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+#close-container {
+    display: flex;
+    flex-direction: row-reverse;
+}

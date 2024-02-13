@@ -14,14 +14,16 @@ interface ContainerProps {
 }
 export default function Container({setLoggedIn}: ContainerProps) {
 
+
+
     return (
         <div className="Container">
             <Header/>
             <Routes>
                 <Route path="MainPage" element={<MainPage/>}/>
-                <Route path="Timetable" element={<Timetable setLoggedIn={setLoggedIn}/>}/>
-                <Route path="Exercises" element={<Exercises/>}/>
-                <Route path="Events" element={<Events setLoggedIn={setLoggedIn}/>}/>
+                <Route path="Timetable/*" element={<Timetable setLoggedIn={setLoggedIn}/>}/>
+                <Route path="Exercises/*" element={<Exercises setLoggedIn={setLoggedIn}/>}/>
+                <Route path="Events/*" element={<Events setLoggedIn={setLoggedIn}/>}/>
                 <Route path="Statistics" element={<Statistics/>}/>
                 <Route path="Profile" element={<Profile setLoggedIn={setLoggedIn}/>}/>
             </Routes>

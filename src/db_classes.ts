@@ -1,22 +1,46 @@
-export class AddUserEventRequest {
+export class TrainingAddRequest {
     collectiveEvent: CollectiveEvent;
-    custom: Custom | null;
-    playerCustom: PlayerCustom | null;
-    match: Match | null;
-    playerMatch: PlayerMatch | null;
     training: Training | null;
     playerTraining: PlayerTraining | null;
 
-    constructor(collectiveEvent: CollectiveEvent, custom: Custom | null, playerCustom: PlayerCustom | null,
-                match: Match | null, playerMatch: PlayerMatch | null, training: Training | null,
-                playerTraining: PlayerTraining | null) {
+    constructor(collectiveEvent: CollectiveEvent, training: Training | null, playerTraining: PlayerTraining | null) {
+        this.collectiveEvent = collectiveEvent;
+        this.training = training;
+        this.playerTraining = playerTraining;
+    }
+}
+
+export class MatchAddRequest {
+    collectiveEvent: CollectiveEvent;
+    match: Match | null;
+    playerMatch: PlayerMatch | null;
+
+    constructor(collectiveEvent: CollectiveEvent, match: Match | null, playerMatch: PlayerMatch | null) {
+        this.collectiveEvent = collectiveEvent;
+        this.match = match;
+        this.playerMatch = playerMatch;
+    }
+}
+
+export class CustomAddRequest {
+    collectiveEvent: CollectiveEvent;
+    custom: Custom | null;
+    playerCustom: PlayerCustom | null;
+
+    constructor(collectiveEvent: CollectiveEvent, custom: Custom | null, playerCustom: PlayerCustom | null) {
         this.collectiveEvent = collectiveEvent;
         this.custom = custom;
         this.playerCustom = playerCustom;
-        this.match = match;
-        this.playerMatch = playerMatch;
-        this.training = training;
-        this.playerTraining = playerTraining;
+    }
+}
+
+export class ExercisesMatchRequest {
+    eventId: number;
+    exercisesIds: (number | undefined)[];
+
+    constructor(eventId: number, exercisesIds: (number | undefined)[]) {
+        this.eventId = eventId;
+        this.exercisesIds = exercisesIds;
     }
 }
 
@@ -85,6 +109,7 @@ export class PlayerMatch {
 }
 
 export class Training {
+    id: number | undefined;
     type: string;
     players_amount: number | undefined | null;
     field_format: string;
@@ -132,5 +157,36 @@ export class PlayerCustom {
         this.what_disliked = what_disliked;
         this.what_to_improve = what_to_improve;
         this.comments = comments;
+    }
+}
+
+export class Exercise {
+    id: number | undefined;
+    title: string;
+    technic: string;
+    photo: FormData | null;
+    video: FormData | null;
+    duration: string;
+    amount: number;
+    muscle_load: string;
+    equipment: string;
+    min_people: number;
+    usage_count: number | undefined;
+    date: Date;
+
+
+    constructor(title: string, technic: string, photo: FormData | null, video: FormData | null, duration: string,
+                amount: number, muscle_load: string, equipment: string, min_people: number) {
+        this.title = title;
+        this.technic = technic;
+        this.photo = photo;
+        this.video = video;
+        this.duration = duration;
+        this.amount = amount;
+        this.muscle_load = muscle_load;
+        this.equipment = equipment;
+        this.min_people = min_people;
+        this.usage_count = 0;
+        this.date = new Date();
     }
 }

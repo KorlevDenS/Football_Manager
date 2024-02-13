@@ -9,8 +9,6 @@ export default function EventSelfInfo({event}: EventSelfInfoProps) {
 
 
 
-
-
     return (
         <div>
             SELF_INFO

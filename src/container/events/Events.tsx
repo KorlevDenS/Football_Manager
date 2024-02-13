@@ -5,6 +5,8 @@ import React, {useEffect, useState} from "react";
 import {Dialog} from "primereact/dialog";
 import EventAddForm from "./EventAddForm";
 import {CollectiveEvent} from "../../db_classes";
+import {Route, Routes, useNavigate} from "react-router-dom";
+import EventContainer from "./EventContainer";
 
 interface EventAddProps {
     setLoggedIn(loggedIn: boolean): void;
@@ -13,6 +15,8 @@ interface EventAddProps {
 export default function Events({setLoggedIn}: EventAddProps) {
 
     const [events, setEvents] = useState<CollectiveEvent[]>([]);
+    const navigate = useNavigate();
+    const [showingEvent, setShowingEvent] = useState<CollectiveEvent>();
 
 
     useEffect(() => {
@@ -36,7 +40,7 @@ export default function Events({setLoggedIn}: EventAddProps) {
                     let eventsArray: CollectiveEvent[];
                     data.then(value => {eventsArray = value as CollectiveEvent[]})
                         .then(() => setEvents(eventsArray
-                            .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+                            .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
                         ));
 
                     data.then(value => {console.log(value)});
@@ -51,21 +55,42 @@ export default function Events({setLoggedIn}: EventAddProps) {
         );
     }
 
+    const loadEventInfo = (event: CollectiveEvent) => {
+        setShowingEvent(event);
+        navigate("event/info");
+    }
+
     return (
         <div className='Events'>
             <EventNav setLoggedIn={setLoggedIn} getEvents={getEvents}/>
-            {events.map(event =>
-                <EventItem event={event}/>
-            )}
+            <Routes>
+                <Route index element={
+                    <>
+                        {events.map(event =>
+                            <EventItem event={event} loadEventInfo={loadEventInfo} setLoggedIn={setLoggedIn}/>
+                        )}
+                    </>
+                }></Route>
+                <Route path={"event/info"} element={
+                    <>
+                        {showingEvent != null && (
+                            <EventContainer event={showingEvent} setLoggedIn={setLoggedIn}
+                                            handleClose={() => navigate("/manager/Events")}/>
+                        )}
+                    </>
+                }></Route>
+            </Routes>
         </div>
     );
 }
 
 interface EventItemProps {
     event: CollectiveEvent;
+    loadEventInfo(event: CollectiveEvent): void;
+    setLoggedIn(loggedIn: boolean): void;
 }
 
-function EventItem({event}: EventItemProps) {
+function EventItem({event, loadEventInfo}: EventItemProps) {
 
     const getDate = () => {
         const date = new Date(event.date);
@@ -76,7 +101,7 @@ function EventItem({event}: EventItemProps) {
     return (
         <div className='event-item'>
             {getDate()}
-            <EventLayout event={event}/>
+            <EventLayout event={event} loadEvenInfo={loadEventInfo}/>
         </div>
     );
 }

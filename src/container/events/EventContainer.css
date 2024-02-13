@@ -1,0 +1,23 @@
+.event_info {
+    width: 100%;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+#close-modal {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+#info-container {
+
+}
+
+#info-navigate {
+    margin-top: auto;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}

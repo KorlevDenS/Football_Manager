@@ -13,7 +13,7 @@ export default function App() {
 
     useEffect(() => {
         if (loggedIn) {
-            navigate("manager", {replace: false});
+            navigate("manager/MainPage", {replace: false});
         } else {
             navigate("auth", {replace: false});
         }
