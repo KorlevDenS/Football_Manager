@@ -43,12 +43,17 @@ export default function Timetable({setLoggedIn}: TimeTableProps) {
 
 
     useEffect(() => {
+        loadTimetable();
+    }, [weekOffset]);
+
+
+    const loadTimetable = () => {
         let weekNow = calcWeek(weekOffset);
         setWeek(weekNow);
         const begin = weekNow[0].getDate() + '.' + (weekNow[0].getMonth() + 1) + '.' + weekNow[0].getFullYear();
         const end = weekNow[6].getDate() + '.' + (weekNow[6].getMonth() + 1) + '.' + weekNow[6].getFullYear();
         getEventsByTimePeriod(begin, end);
-    }, [weekOffset]);
+    }
 
 
     const formWeekSchedule = (events: CollectiveEvent[]) => {
@@ -95,29 +100,36 @@ export default function Timetable({setLoggedIn}: TimeTableProps) {
 
     const loadEventInfo = (event: CollectiveEvent) => {
         setShowingEvent(event);
-        navigate("event/info");
+        navigate("event/about");
+    }
+
+    const handleClose = (updateView: boolean) => {
+        navigate("/manager/Timetable");
+        if (updateView) loadTimetable();
     }
 
     return (
         <div className='Timetable'>
-            <TimeNav monday={week[0]} sunday={week[6]} incDecZeroOffset={incDecZeroOffset}/>
             <Routes>
                 <Route index element={
-                    <div className='table-body'>
-                        <DaysLayout day={week[0]} dayEvents={eventsSchedule[1]} loadEventInfo={loadEventInfo}/>
-                        <DaysLayout day={week[1]} dayEvents={eventsSchedule[2]} loadEventInfo={loadEventInfo}/>
-                        <DaysLayout day={week[2]} dayEvents={eventsSchedule[3]} loadEventInfo={loadEventInfo}/>
-                        <DaysLayout day={week[3]} dayEvents={eventsSchedule[4]} loadEventInfo={loadEventInfo}/>
-                        <DaysLayout day={week[4]} dayEvents={eventsSchedule[5]} loadEventInfo={loadEventInfo}/>
-                        <DaysLayout day={week[5]} dayEvents={eventsSchedule[6]} loadEventInfo={loadEventInfo}/>
-                        <DaysLayout day={week[6]} dayEvents={eventsSchedule[0]} loadEventInfo={loadEventInfo}/>
-                    </div>
+                    <>
+                        <TimeNav monday={week[0]} sunday={week[6]} incDecZeroOffset={incDecZeroOffset}/>
+                        <div className='table-body'>
+                            <DaysLayout day={week[0]} dayEvents={eventsSchedule[1]} loadEventInfo={loadEventInfo}/>
+                            <DaysLayout day={week[1]} dayEvents={eventsSchedule[2]} loadEventInfo={loadEventInfo}/>
+                            <DaysLayout day={week[2]} dayEvents={eventsSchedule[3]} loadEventInfo={loadEventInfo}/>
+                            <DaysLayout day={week[3]} dayEvents={eventsSchedule[4]} loadEventInfo={loadEventInfo}/>
+                            <DaysLayout day={week[4]} dayEvents={eventsSchedule[5]} loadEventInfo={loadEventInfo}/>
+                            <DaysLayout day={week[5]} dayEvents={eventsSchedule[6]} loadEventInfo={loadEventInfo}/>
+                            <DaysLayout day={week[6]} dayEvents={eventsSchedule[0]} loadEventInfo={loadEventInfo}/>
+                        </div>
+                    </>
                 }></Route>
-                <Route path={"event/info"} element={
+                <Route path={"event/about/*"} element={
                     <>
                         {showingEvent != null && (
                             <EventContainer event={showingEvent} setLoggedIn={setLoggedIn}
-                                            handleClose={() => navigate("/manager/Timetable")}/>
+                                            handleClose={handleClose}/>
                         )}
                     </>
                 }></Route>

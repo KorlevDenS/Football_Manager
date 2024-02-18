@@ -57,25 +57,30 @@ export default function Events({setLoggedIn}: EventAddProps) {
 
     const loadEventInfo = (event: CollectiveEvent) => {
         setShowingEvent(event);
-        navigate("event/info");
+        navigate("event/about");
+    }
+
+    const handleClose = (updateView: boolean) => {
+        navigate("/manager/Events");
+        if (updateView) getEvents();
     }
 
     return (
         <div className='Events'>
-            <EventNav setLoggedIn={setLoggedIn} getEvents={getEvents}/>
             <Routes>
                 <Route index element={
                     <>
+                        <EventNav setLoggedIn={setLoggedIn} getEvents={getEvents}/>
                         {events.map(event =>
                             <EventItem event={event} loadEventInfo={loadEventInfo} setLoggedIn={setLoggedIn}/>
                         )}
                     </>
                 }></Route>
-                <Route path={"event/info"} element={
+                <Route path={"event/about/*"} element={
                     <>
                         {showingEvent != null && (
                             <EventContainer event={showingEvent} setLoggedIn={setLoggedIn}
-                                            handleClose={() => navigate("/manager/Events")}/>
+                                            handleClose={handleClose}/>
                         )}
                     </>
                 }></Route>

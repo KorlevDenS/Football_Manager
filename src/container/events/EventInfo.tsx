@@ -1,17 +1,26 @@
 import {CollectiveEvent, Match, Training, Custom} from "../../db_classes";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
+import {useNavigate} from "react-router-dom";
+import Button from "@mui/material/Button";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
 
 
 interface EventInfoProps {
     event: CollectiveEvent;
+    handleClose(updateView: boolean): void;
     setLoggedIn(loggedIn: boolean): void;
 }
 
-export default function EventInfo({event, setLoggedIn}: EventInfoProps) {
+export default function EventInfo({event, handleClose, setLoggedIn}: EventInfoProps) {
 
     const [matchInfo, setMatchInfo] = useState<Match | null>(null);
     const [trainingInfo, setTrainingInfo] = useState<Training | null>(null);
     const [customInfo, setCustomInfo] = useState<Custom | null>(null);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (event.type === "Матч")
@@ -102,6 +111,11 @@ export default function EventInfo({event, setLoggedIn}: EventInfoProps) {
 
     return (
         <>
+            <div id={"close-modal"}>
+                <IconButton onClick={() => handleClose(false)}>
+                    <CloseIcon/>
+                </IconButton>
+            </div>
             {event.type == "Матч" && (
                 <div>
                     Матч: {matchInfo?.team1} : {matchInfo?.team2} <br/>
@@ -122,6 +136,18 @@ export default function EventInfo({event, setLoggedIn}: EventInfoProps) {
                     Название события: {customInfo?.name}<br/>
                 </div>
             )}
+            <div className={"info-navigate"}>
+                <div id={"left-button"}>
+                    <Button onClick={() => navigate("selfInfo")} startIcon={<ArrowBackIosIcon/>}>
+                        Личная оценка
+                    </Button>
+                </div>
+                <div id={"right-button"}>
+                    <Button onClick={() => navigate("process")} endIcon={<ArrowForwardIosIcon/>}>
+                        Процесс
+                    </Button>
+                </div>
+            </div>
         </>
     );
 }

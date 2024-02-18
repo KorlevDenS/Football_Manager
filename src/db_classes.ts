@@ -1,3 +1,49 @@
+export class UserLogin {
+    login: string;
+    password: string;
+
+    constructor(login: string, password: string) {
+        this.login = login;
+        this.password = password;
+    }
+}
+
+export class UserConfig {
+    username: string;
+    password: string;
+    login: string;
+    role: string;
+    reg_date: Date;
+
+    constructor(username: string, password: string, login: string,
+                role: string, reg_date: Date) {
+        this.username = username;
+        this.password = password;
+        this.login = login;
+        this.role = role;
+        this.reg_date = reg_date;
+    }
+}
+
+export class Human {
+    id: number | undefined;
+    name: string;
+    surname: string;
+    patronymic: string;
+    birthday: Date;
+    sex: string;
+    passport_id: string;
+
+    constructor(name: string, surname: string, patronymic: string, birthday: Date, sex: string, passport_id: string) {
+        this.name = name;
+        this.surname = surname;
+        this.patronymic = patronymic;
+        this.birthday = birthday;
+        this.sex = sex;
+        this.passport_id = passport_id;
+    }
+}
+
 export class TrainingAddRequest {
     collectiveEvent: CollectiveEvent;
     training: Training | null;
@@ -84,6 +130,7 @@ export class Match {
 }
 
 export class PlayerMatch {
+    id: number | undefined;
     goals: number | undefined | null;
     field_time: string | null | undefined;
     role: string | null | undefined;
@@ -122,6 +169,7 @@ export class Training {
 }
 
 export class PlayerTraining {
+    id: number | undefined;
     goals: number | undefined | null;
     what_liked: string;
     what_disliked: string;
@@ -147,6 +195,7 @@ export class Custom {
 }
 
 export class PlayerCustom {
+    id: number | undefined;
     what_liked: string;
     what_disliked: string;
     what_to_improve: string;

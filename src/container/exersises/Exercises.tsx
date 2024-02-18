@@ -57,11 +57,10 @@ export default function Exercises({setLoggedIn}: ExerciseAddProps) {
 
     return (
         <div className='Exercises'>
-            <ExerciseNav setLoggedIn={setLoggedIn} getExercises={getExercises}/>
-
             <Routes>
                 <Route index element={
                     <>
+                        <ExerciseNav setLoggedIn={setLoggedIn} getExercises={getExercises}/>
                         {exercises.map(exercise =>
                             <div className={"exercise-item"}>
                                 <ExerciseLayout exercise={exercise} loadExerciseInfo={loadExerciseInfo}/>

@@ -20,6 +20,14 @@
     background: rgb(242, 242, 242);
 }
 
+.EventLayout div {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* number of lines to show */
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
 #left-button {
     width: 50%;
     display: flex;
