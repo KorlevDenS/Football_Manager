@@ -1,0 +1,17 @@
+.club-info {
+    width: 100%;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    min-height: 90vh;
+}
+
+#close-container {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+img {
+    max-width: 400px;
+    max-height: 400px;
+}

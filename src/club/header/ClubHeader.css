@@ -1,0 +1,7 @@
+.ClubHeader {
+    background-color: white;
+    height: 10vh;
+    position: sticky;
+    display: flex;
+    width: 100%;
+}

@@ -1,3 +1,25 @@
 .Profile {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    min-height: 90vh;
+}
 
+.user-info {
+    min-width: 10px;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+}
+
+.exclude {
+}
+
+.user-info > *:not(.exclude) {
+    margin-top: 3em;
+}
+
+.person-fields {
+    display: flex;
+    flex-direction: row;
 }

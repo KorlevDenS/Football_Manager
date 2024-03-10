@@ -1,0 +1,20 @@
+.ClubNavBar {
+    background-color: red;
+    float: right;
+    width: 240px;
+    position: sticky;
+    display: flex;
+    flex-direction: column;
+}
+
+.CBall {
+    height: 100%;
+}
+
+
+#CBall {
+    height: 120px;
+    width: 120px;
+    margin: 10% auto 10% 15%;
+    display: flex;
+}

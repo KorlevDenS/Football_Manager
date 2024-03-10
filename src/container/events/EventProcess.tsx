@@ -1,6 +1,6 @@
 import {CollectiveEvent, Exercise} from "../../db_classes";
 import React, {useEffect, useState} from "react";
-import {Route, Routes, useLocation, useNavigate} from "react-router-dom";
+import {Route, Routes, useNavigate} from "react-router-dom";
 import ExerciseLayout from "../exersises/ExerciseLayout";
 import ExerciseContainer from "../exersises/ExerciseContainer";
 import './EventProcess.css';
@@ -29,7 +29,9 @@ export default function EventProcess({event, handleClose, setLoggedIn}: EventPro
     }
 
     useEffect(() => {
-        getExercises();
+        if (event.type == "Тренировка") {
+            getExercises();
+        }
     }, []);
 
 
@@ -72,14 +74,16 @@ export default function EventProcess({event, handleClose, setLoggedIn}: EventPro
                                 <CloseIcon/>
                             </IconButton>
                         </div>
-                        Процесс тренировки
-                        <div className={"training-exercises"}>
-                            {exercises.map(exercise =>
-                                <div className={"exercise-item"}>
-                                    <ExerciseLayout exercise={exercise} loadExerciseInfo={loadExerciseInfo}/>
-                                </div>
-                            )}
-                        </div>
+                        {event.type} : процесс
+                        { event.type == "Тренировка" && (
+                            <div className={"training-exercises"}>
+                                {exercises.map(exercise =>
+                                    <div className={"exercise-item"}>
+                                        <ExerciseLayout exercise={exercise} loadExerciseInfo={loadExerciseInfo}/>
+                                    </div>
+                                )}
+                            </div>
+                        )}
 
                         <div className={"info-navigate"}>
                             <div id={"left-button"}>

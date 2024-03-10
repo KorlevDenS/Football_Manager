@@ -94,9 +94,8 @@ export default function PersonalDataForm({user, setLoggedIn}: PersonalDataFormPr
                     renderInput={(params) => (
                         <TextField
                             {...params}
-                            label="Упражнения"
+                            label="Пол"
                             required={true}
-                            placeholder="В этой тренировке"
                         />
                     )}
                 />

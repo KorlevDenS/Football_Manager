@@ -81,8 +81,6 @@ export default function ExerciseContainer({exercise, setLoggedIn, handleClose}: 
                     Необходимые принадлежности: {exercise.equipment} <br/>
                     Минимальное количество человек: {exercise.min_people} <br/>
                     Фото: {<img src={photo} alt={"No photo"}/>}
-                    {/*Видео: {<video src={video} width="750" height="500" controls >*/}
-                    {/*<source src={video} type="video/mp4"/></video>}*/}
                 </>
             </div>
         </div>

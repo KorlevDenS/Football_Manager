@@ -1,0 +1,10 @@
+.ClubAddForm {
+    display: flex;
+    flex-direction: row;
+}
+
+.club-add-form-part {
+    display: flex;
+    flex-direction: column;
+    margin: 2%;
+}

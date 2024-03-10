@@ -5,11 +5,11 @@ import event from '../images/event.png';
 import player from '../images/player.png';
 import timetable from '../images/timetable.png';
 import stat from '../images/stat.png';
+import clubs from '../images/clubs.png';
 import NavRow from "./NavRow";
 
-import {useNavigate} from "react-router-dom";
 export default function NavBar() {
-    const parentPath = "manager/";
+    const parentPath = "/manager/";
 
 
     return (
@@ -24,6 +24,7 @@ export default function NavBar() {
             <NavRow inlineText={"События"} icon_url={event} name={parentPath + "Events"}/>
             <NavRow inlineText={"Упражнения"} icon_url={player} name={parentPath + "Exercises"}/>
             <NavRow inlineText={"Статистика"} icon_url={stat} name={parentPath + "Statistics"}/>
+            <NavRow inlineText={"Клубы"} icon_url={clubs} name={parentPath + "Clubs"}/>
         </div>
     );
 }

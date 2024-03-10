@@ -1,3 +1,25 @@
+
+export class Club {
+    id: number | undefined;
+    name: string;
+    foundation_date: Date;
+    reg_date: Date;
+    id_founder: number | undefined;
+    location: string;
+    short_name: string;
+    description: string;
+
+    constructor(name: string, foundation_date: Date, reg_date: Date,
+                location: string, short_name: string, description: string) {
+        this.name = name;
+        this.foundation_date = foundation_date;
+        this.reg_date = reg_date;
+        this.location = location;
+        this.short_name = short_name;
+        this.description = description;
+    }
+}
+
 export class UserLogin {
     login: string;
     password: string;
@@ -9,6 +31,7 @@ export class UserLogin {
 }
 
 export class UserConfig {
+    id: number | undefined;
     username: string;
     password: string;
     login: string;
@@ -22,6 +45,20 @@ export class UserConfig {
         this.login = login;
         this.role = role;
         this.reg_date = reg_date;
+    }
+}
+
+export class Player {
+    id_config: number | undefined;
+    id_human: number | undefined;
+    role: string;
+    height: number;
+    weight: number;
+
+    constructor(role: string, height: number, weight: number) {
+        this.role = role;
+        this.height = height;
+        this.weight = weight;
     }
 }
 
