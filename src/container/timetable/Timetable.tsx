@@ -52,7 +52,7 @@ export default function Timetable({setLoggedIn}: TimeTableProps) {
         setWeek(weekNow);
         const begin = weekNow[0].getDate() + '.' + (weekNow[0].getMonth() + 1) + '.' + weekNow[0].getFullYear();
         const end = weekNow[6].getDate() + '.' + (weekNow[6].getMonth() + 1) + '.' + weekNow[6].getFullYear();
-        getEventsByTimePeriod(begin, end);
+        getEventsByTimePeriod(begin, end).then();
     }
 
 
@@ -99,7 +99,9 @@ export default function Timetable({setLoggedIn}: TimeTableProps) {
     }
 
     const loadEventInfo = (event: CollectiveEvent) => {
-        setShowingEvent(event);
+        let e = event;
+        e.date = new Date(e.date);
+        setShowingEvent(e);
         navigate("event/about");
     }
 
@@ -128,7 +130,7 @@ export default function Timetable({setLoggedIn}: TimeTableProps) {
                 <Route path={"event/about/*"} element={
                     <>
                         {showingEvent != null && (
-                            <EventContainer event={showingEvent} setLoggedIn={setLoggedIn}
+                            <EventContainer event={showingEvent} getEvent={loadTimetable} setLoggedIn={setLoggedIn}
                                             handleClose={handleClose}/>
                         )}
                     </>

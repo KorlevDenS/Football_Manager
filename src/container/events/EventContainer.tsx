@@ -10,10 +10,11 @@ import {Route, Routes} from "react-router-dom";
 interface EventContainerProps {
     event: CollectiveEvent;
     setLoggedIn(loggedIn: boolean): void;
+    getEvent(): void;
     handleClose(updateView: boolean): void;
 }
 
-export default function EventContainer({event, handleClose, setLoggedIn}: EventContainerProps) {
+export default function EventContainer({event, handleClose, getEvent, setLoggedIn}: EventContainerProps) {
 
     return (
         <div className={"event_info"}>
@@ -21,7 +22,7 @@ export default function EventContainer({event, handleClose, setLoggedIn}: EventC
                 <Routes>
                     <Route index element={
                         <>
-                            <EventInfo event={event} handleClose={handleClose} setLoggedIn={setLoggedIn}/>
+                            <EventInfo event={event} handleClose={handleClose} getEvent={getEvent} setLoggedIn={setLoggedIn}/>
                         </>
                     }></Route>
                     <Route path={"process/*"} element={

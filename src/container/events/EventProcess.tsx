@@ -68,7 +68,7 @@ export default function EventProcess({event, handleClose, setLoggedIn}: EventPro
         <div>
             <Routes>
                 <Route index element={
-                    <>
+                    <div className={"EventProcess"}>
                         <div id={"close-modal"}>
                             <IconButton onClick={() => handleClose(false)}>
                                 <CloseIcon/>
@@ -97,7 +97,7 @@ export default function EventProcess({event, handleClose, setLoggedIn}: EventPro
                                 </Button>
                             </div>
                         </div>
-                    </>
+                    </div>
                 }></Route>
                 <Route path={"exercise/info"} element={
                     <>

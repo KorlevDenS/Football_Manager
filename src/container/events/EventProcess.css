@@ -3,3 +3,10 @@
     flex-direction: row;
     flex-wrap: wrap;
 }
+
+.EventProcess {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    min-height: 90vh;
+}

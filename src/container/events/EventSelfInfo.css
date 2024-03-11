@@ -1,0 +1,22 @@
+.EventSelfInfo {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    min-height: 90vh;
+}
+
+.event-info {
+    min-width: 10px;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+}
+
+.event-info > *:not(.exclude) {
+    margin-top: 3em;
+}
+
+.event-fields {
+    display: flex;
+    flex-direction: row;
+}

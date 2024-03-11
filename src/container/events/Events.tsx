@@ -20,7 +20,7 @@ export default function Events({setLoggedIn}: EventAddProps) {
 
 
     useEffect(() => {
-        getEvents();
+        getEvents().then();
     }, []);
 
     const getEvents = async () => {
@@ -56,7 +56,9 @@ export default function Events({setLoggedIn}: EventAddProps) {
     }
 
     const loadEventInfo = (event: CollectiveEvent) => {
-        setShowingEvent(event);
+        let e = event;
+        e.date = new Date(e.date);
+        setShowingEvent(e);
         navigate("event/about");
     }
 
@@ -79,7 +81,7 @@ export default function Events({setLoggedIn}: EventAddProps) {
                 <Route path={"event/about/*"} element={
                     <>
                         {showingEvent != null && (
-                            <EventContainer event={showingEvent} setLoggedIn={setLoggedIn}
+                            <EventContainer event={showingEvent} getEvent={getEvents} setLoggedIn={setLoggedIn}
                                             handleClose={handleClose}/>
                         )}
                     </>
