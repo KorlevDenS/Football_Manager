@@ -1,0 +1,40 @@
+.ApplicationLayout {
+    width: 92%;
+    margin-top: 2%;
+    margin-left: 4%;
+    margin-right: 4%;
+    background-color: white;
+//border-radius: 10%;
+//border: 1px solid black;
+
+    display: flex;
+    flex-direction: row;
+    color: darkblue;
+    text-align: left;
+    padding-left: 5%;
+    padding-right: 5%;
+    -webkit-user-select: none;
+    cursor: pointer;
+}
+
+.apply-button {
+    margin-left: auto;
+}
+
+.ApplicationLayout div {
+    margin: auto;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* number of lines to show */
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.ApplicationLayout:hover {
+    background: rgb(242, 242, 242);
+}
+
+#club-title {
+    font-size: large;
+    font-weight: bold;
+}

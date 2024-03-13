@@ -1,3 +1,21 @@
+export class Application {
+    id: number | undefined;
+    id_player: number | undefined;
+    id_club: number;
+    player_approve: number;
+    club_approve: number;
+    creation_date: Date;
+    message: string;
+
+    constructor(id_club: number, player_approve: number, club_approve: number,
+                creation_date: Date, message: string) {
+        this.id_club = id_club;
+        this.player_approve = player_approve;
+        this.club_approve = club_approve;
+        this.creation_date = creation_date;
+        this.message = message;
+    }
+}
 
 export class Club {
     id: number | undefined;
@@ -45,6 +63,16 @@ export class UserConfig {
         this.login = login;
         this.role = role;
         this.reg_date = reg_date;
+    }
+}
+
+export class Participant {
+    player: Player;
+    human: Human;
+
+    constructor(player: Player, human: Human) {
+        this.player = player;
+        this.human = human;
     }
 }
 

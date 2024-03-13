@@ -1,0 +1,10 @@
+.Participants {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.participant-item {
+//width: 14.28%;
+    width: 312px;
+}

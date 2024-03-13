@@ -13,7 +13,7 @@ export default function ClubNavRow({inlineText, name, icon_url}: ClubNavRowProps
     const navigate = useNavigate();
 
     return (
-        <div className={"row-container"}>
+        <div className={"club-row-container"}>
             <Button variant="contained" color={"error"}  className={"ClubNavRow"} onClick={() => navigate(name, {replace: false})}>
 
                 <div className='icon-layout'>

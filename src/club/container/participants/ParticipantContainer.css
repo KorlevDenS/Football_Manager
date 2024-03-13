@@ -1,0 +1,12 @@
+.participant_info {
+    width: 100%;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    min-height: 90vh;
+}
+
+#participant-close-container {
+    display: flex;
+    flex-direction: row-reverse;
+}

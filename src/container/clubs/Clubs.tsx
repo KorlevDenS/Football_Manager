@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Club} from "../../db_classes";
+import {Application, Club} from "../../db_classes";
 import {Dialog} from "primereact/dialog";
 import ClubLayout from "./ClubLayout";
 import ClubAddForm from "./ClubAddForm";
@@ -10,6 +10,7 @@ import './Clubs.css';
 
 import {Route, Routes, useNavigate} from "react-router-dom";
 import ClubContainer from "./ClubContainer";
+import ApplicationLayout from "./ApplicationLayout";
 
 
 interface ClubsProps {
@@ -23,6 +24,7 @@ export default function Clubs({setClub, setExitPath,setLoggedIn}: ClubsProps) {
     const [allClubs, setAllClubs] = useState<Club[]>([]);
     const [joinedClubs, setJoinedClubs] = useState<Club[]>([]);
     const [manageClubs, setManageClubs] = useState<Club[]>([]);
+    const [applications, setApplications] = useState<Application[]>([]);
 
     const [showingClub, setShowingClub] = useState<Club>();
     const navigate = useNavigate();
@@ -31,6 +33,7 @@ export default function Clubs({setClub, setExitPath,setLoggedIn}: ClubsProps) {
         getManageClubs().then();
         getJoinedClubs().then();
         getAllClubs().then();
+        getApplications().then();
     }, []);
 
     const getAllClubs = async () => {
@@ -99,9 +102,35 @@ export default function Clubs({setClub, setExitPath,setLoggedIn}: ClubsProps) {
         });
     }
 
+    const getApplications = async () => {
+        let token = localStorage.getItem("jwtToken");
+        await fetch(`/club/get/player/applications`, {
+            method: 'GET',
+            headers: {
+                'Authorization': token != null ? token : "",
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        }).then(response => {
+            if (response.ok) {
+                const data = response.json();
+                let appsArray: Application[];
+                data.then(value => {appsArray = value as Application[]})
+                    .then(() => setApplications(appsArray));
+            } else if (response.status === 401) {
+                setLoggedIn(false);
+                localStorage.setItem("loggedIn", "false");
+            }
+        });
+    }
+
     const loadClubInfo = (club: Club) => {
         setShowingClub(club);
         navigate("club/info");
+    }
+
+    const isMine = (club: Club) => {
+        return joinedClubs.some(obj => obj.id === club.id);
     }
 
     return (
@@ -120,6 +149,18 @@ export default function Clubs({setClub, setExitPath,setLoggedIn}: ClubsProps) {
                             {allClubs.map(club =>
                                 <div>
                                     <ClubLayout club={club} loadClubInfo={loadClubInfo}/>
+                                </div>
+                            )}
+                        </div>
+                    </>
+                }></Route>
+                <Route path={"applications"} element={
+                    <>
+                        <div>Мои заявки</div>
+                        <div>
+                            {applications.map(app =>
+                                <div>
+                                    <ApplicationLayout application={app}/>
                                 </div>
                             )}
                         </div>
@@ -145,7 +186,8 @@ export default function Clubs({setClub, setExitPath,setLoggedIn}: ClubsProps) {
                                     {showingClub != null && (
                                         <ClubContainer club={showingClub} setLoggedIn={setLoggedIn}
                                                        handleClose={() => navigate("/manager/Clubs/joined")}
-                                                       setClub={setClub} setExitPath={setExitPath}/>
+                                                       setClub={setClub} setExitPath={setExitPath} isMine={isMine}
+                                                       loadApplications={getApplications} loadJoinedClubs={getJoinedClubs}/>
                                     )}
                                 </>
                             }></Route>
@@ -172,7 +214,8 @@ export default function Clubs({setClub, setExitPath,setLoggedIn}: ClubsProps) {
                                     {showingClub != null && (
                                         <ClubContainer club={showingClub} setLoggedIn={setLoggedIn}
                                                        handleClose={() => navigate("/manager/Clubs/management")}
-                                                       setClub={setClub} setExitPath={setExitPath}/>
+                                                       setClub={setClub} setExitPath={setExitPath} isMine={isMine}
+                                                       loadApplications={getApplications} loadJoinedClubs={getJoinedClubs}/>
                                     )}
                                 </>
                             }>
@@ -186,7 +229,8 @@ export default function Clubs({setClub, setExitPath,setLoggedIn}: ClubsProps) {
                         {showingClub != null && (
                             <ClubContainer club={showingClub} setLoggedIn={setLoggedIn}
                                            handleClose={() => navigate("/manager/Clubs")}
-                                           setClub={setClub} setExitPath={setExitPath}/>
+                                           setClub={setClub} setExitPath={setExitPath} isMine={isMine}
+                                           loadApplications={getApplications} loadJoinedClubs={getJoinedClubs}/>
                         )}
                     </>
                 }></Route>
@@ -215,6 +259,9 @@ function  ClubNav({setLoggedIn, getClubs}: ClubNavProps) {
             <IconButton onClick={() => setModalActive(true)}>
                 <LibraryAddIcon color="primary"/>
             </IconButton>
+
+            <Button onClick={() => navigate("/manager/Clubs/applications")}>Заявки</Button>
+
             <Dialog header="Создание нового клуба" visible={isModalActive}
                     onHide={() => setModalActive(false)}>
                 <ClubAddForm setModalActive={setModalActive} setLoggedIn={setLoggedIn} getClubs={getClubs}/>

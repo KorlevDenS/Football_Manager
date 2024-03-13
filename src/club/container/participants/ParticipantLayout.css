@@ -1,0 +1,33 @@
+.ParticipantLayout {
+    width: 92%;
+    margin: 4%;
+    background-color: white;
+
+    height: 150px;
+    display: flex;
+    flex-direction: column;
+    color: darkblue;
+    text-align: left;
+    padding-left: 5%;
+    padding-right: 5%;
+    -webkit-user-select: none;
+    cursor: pointer;
+}
+
+.ParticipantLayout div {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* number of lines to show */
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.ParticipantLayout:hover {
+    background: rgb(242, 242, 242);
+}
+
+#participant-title {
+    font-size: large;
+    font-weight: bold;
+    margin-bottom: 5%;
+}

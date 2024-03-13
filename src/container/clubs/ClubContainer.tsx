@@ -1,26 +1,30 @@
-import {Club, Human} from "../../db_classes";
+import {Application, Club, Human} from "../../db_classes";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import React, {useEffect, useState} from "react";
 import './ClubContainer.css'
-import {useLocation, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import Button from "@mui/material/Button";
 
 
 interface ClubContainerProps {
     club: Club;
     setClub(club: Club): void;
+    isMine(club: Club): boolean;
+    loadApplications(): void;
     setExitPath(exitPath: string): void;
     setLoggedIn(loggedIn: boolean): void;
     handleClose(): void;
+    loadJoinedClubs(): void
 }
 
-export default function ClubContainer({club, setClub, setExitPath, setLoggedIn, handleClose}: ClubContainerProps) {
+export default function ClubContainer({club, setClub, isMine, loadApplications,
+                                          setExitPath, setLoggedIn, handleClose, loadJoinedClubs}: ClubContainerProps) {
     const [founder, setFounder] =
         useState<Human>(new Human("name", "surname", "patronymic", new Date(), "sex", ""));
     const [participants, setParticipants] = useState<Human[]>([]);
 
-    const hrefLocation = useLocation();
+    // const hrefLocation = useLocation();
     const navigate = useNavigate();
 
 
@@ -85,6 +89,48 @@ export default function ClubContainer({club, setClub, setExitPath, setLoggedIn, 
         })
     }
 
+    const addApplication = async () => {
+        console.log("Club id: " + club.id);
+        if (club.id === undefined) return;
+        let apply = new Application(club.id, 1, 0, new Date(), club.name);
+        let token = localStorage.getItem("jwtToken");
+        await fetch(`/club/apply/to/club`, {
+            method: 'POST',
+            headers: {
+                'Authorization': token != null ? token : "",
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({"first": apply, "second": club.id})
+        }).then(response => {
+            if (response.ok) {
+                loadApplications();
+            } else if (response.status === 401) {
+                setLoggedIn(false);
+                localStorage.setItem("loggedIn", "false");
+            }
+        });
+    }
+
+    const leaveClub = async () => {
+        let token = localStorage.getItem("jwtToken");
+        await fetch(`/club/leave/from/club`, {
+            method: 'POST',
+            headers: {
+                'Authorization': token != null ? token : "",
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(club.id)
+        }).then(response => {
+            if (response.ok) {
+                loadJoinedClubs();
+            } else if (response.status === 401) {
+                setLoggedIn(false);
+                localStorage.setItem("loggedIn", "false");
+            }
+        });
+    }
 
     return (
         <div className="club-info">
@@ -117,12 +163,17 @@ export default function ClubContainer({club, setClub, setExitPath, setLoggedIn, 
                             {person.surname} &nbsp; {person.name} &nbsp; {person.patronymic}<br/>
                         </div>
                     )}
-                    {hrefLocation.pathname}
                     <Button onClick={() => {
                         setExitPath("/manager/Clubs");
                         setClub(club);
                         navigate("/club/manager/MainPage");
                     }}>К странице клуба</Button>
+                    {!isMine(club) && (
+                        <Button onClick={addApplication}>Подать заявку</Button>
+                    )}
+                    {isMine(club) && (
+                        <Button onClick={leaveClub}>Покинуть клуб</Button>
+                    )}
                 </>
             </div>
 

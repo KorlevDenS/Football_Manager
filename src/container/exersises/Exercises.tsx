@@ -20,7 +20,7 @@ export default function Exercises({setLoggedIn}: ExerciseAddProps) {
 
 
     useEffect(() => {
-        getExercises();
+        getExercises().then();
     }, []);
 
     const getExercises = async () => {
