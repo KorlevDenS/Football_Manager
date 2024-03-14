@@ -24,7 +24,7 @@ export default function Container({setClub, setExitPath, setLoggedIn}: Container
         <div className="Container">
             <Header/>
             <Routes>
-                <Route path="MainPage" element={<MainPage/>}/>
+                <Route path="MainPage" element={<MainPage setLoggedIn={setLoggedIn}/>}/>
                 <Route path="Timetable/*" element={<Timetable setLoggedIn={setLoggedIn}/>}/>
                 <Route path="Exercises/*" element={<Exercises setLoggedIn={setLoggedIn}/>}/>
                 <Route path="Events/*" element={<Events setLoggedIn={setLoggedIn}/>}/>

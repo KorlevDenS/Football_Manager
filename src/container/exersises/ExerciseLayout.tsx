@@ -17,7 +17,7 @@ export default function ExerciseLayout({exercise, loadExerciseInfo}: ExerciseLay
             </div>
 
             <div>
-                <i className="pi pi-clock" style={{fontSize: '0.8rem'}}></i>&nbsp; {exercise.duration}
+                <i className="pi pi-clock" style={{fontSize: '0.8rem'}}></i>&nbsp; {exercise.duration.substring(3)} мин.
             </div>
 
             <div id="description">

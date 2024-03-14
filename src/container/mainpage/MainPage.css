@@ -1,6 +1,25 @@
+.MainPage {
+    display: flex;
+    flex-direction: column;
+}
 
+.MainPage >* {
+    margin-top: 4%;
+}
 
+.me-welcome {
+    font-size: x-large;
+    font-weight: bold;
+    color: darkblue;
+}
 
-.mainB {
-    color: aqua;
+.me-today-events {
+    display: flex;
+    flex-direction: row;
+}
+
+.me-today-info {
+    color: darkgray;
+    font-size: medium;
+    font-weight: bold;
 }

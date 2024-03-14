@@ -32,6 +32,7 @@ export default function PersonalDataForm({user, setLoggedIn}: PersonalDataFormPr
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (birthday === null) return;
+        //TODO
         let human = new Human(name, surname, patronymic, birthday.toDate(), sex, "");
 
         const configResponse = await fetch("/user/set/config", {

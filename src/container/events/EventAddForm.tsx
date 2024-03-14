@@ -272,7 +272,7 @@ export default function EventAddForm({setModalActive, setLoggedIn, getEvents}: E
             <div className="event-add-form-part">
                 <Dropdown value={type} onChange={(e) => {
                     setType(e.value);
-                    specifyForm(e)
+                    specifyForm(e).then();
                 }}
                           options={types}
                           placeholder="Выберите тип события" className="w-full md:w-14rem" required/>

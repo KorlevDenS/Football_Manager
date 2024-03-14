@@ -75,7 +75,7 @@ export default function ExerciseContainer({exercise, setLoggedIn, handleClose}: 
                 <>
                     Название: {exercise.title} <br/>
                     Техника выполнения: {exercise.technic} <br/>
-                    Рекомендуемая продолжительность: {exercise.duration} <br/>
+                    Рекомендуемая продолжительность: {exercise.duration.substring(3)} мин.<br/>
                     Количество повторов: {exercise.amount} <br/>
                     Тип нагрузки: {exercise.muscle_load} <br/>
                     Необходимые принадлежности: {exercise.equipment} <br/>

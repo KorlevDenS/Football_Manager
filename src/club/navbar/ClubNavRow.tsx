@@ -14,7 +14,7 @@ export default function ClubNavRow({inlineText, name, icon_url}: ClubNavRowProps
 
     return (
         <div className={"club-row-container"}>
-            <Button variant="contained" color={"error"}  className={"ClubNavRow"} onClick={() => navigate(name, {replace: false})}>
+            <Button variant="contained" color={"success"}  className={"ClubNavRow"} onClick={() => navigate(name, {replace: false})}>
 
                 <div className='icon-layout'>
                     <img className='nav_icon' src={icon_url} alt=""/>

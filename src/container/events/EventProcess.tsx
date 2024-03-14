@@ -30,7 +30,7 @@ export default function EventProcess({event, handleClose, setLoggedIn}: EventPro
 
     useEffect(() => {
         if (event.type == "Тренировка") {
-            getExercises();
+            getExercises().then();
         }
     }, []);
 

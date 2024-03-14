@@ -64,7 +64,7 @@ export default function Events({setLoggedIn}: EventAddProps) {
 
     const handleClose = (updateView: boolean) => {
         navigate("/manager/Events");
-        if (updateView) getEvents();
+        if (updateView) getEvents().then();
     }
 
     return (
@@ -97,7 +97,7 @@ interface EventItemProps {
     setLoggedIn(loggedIn: boolean): void;
 }
 
-function EventItem({event, loadEventInfo}: EventItemProps) {
+export function EventItem({event, loadEventInfo}: EventItemProps) {
 
     const getDate = () => {
         const date = new Date(event.date);

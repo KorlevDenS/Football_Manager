@@ -1,3 +1,75 @@
+export class ClubCustomAddRequest {
+    clubId: number;
+    clubEvent: ClubEvent;
+    collectiveEvent: CollectiveEvent;
+    custom: Custom;
+    players: number[];
+
+    constructor(clubId: number, clubEvent: ClubEvent, collectiveEvent: CollectiveEvent, custom: Custom, players: number[]) {
+        this.clubId = clubId;
+        this.clubEvent = clubEvent;
+        this.collectiveEvent = collectiveEvent;
+        this.custom = custom;
+        this.players = players;
+    }
+}
+
+export class ClubTrainingAddRequest {
+    clubId: number;
+    clubEvent: ClubEvent;
+    collectiveEvent: CollectiveEvent;
+    training: Training;
+    players: number[];
+
+    constructor(clubId: number, clubEvent: ClubEvent, collectiveEvent: CollectiveEvent, training: Training, players: number[]) {
+        this.clubId = clubId;
+        this.clubEvent = clubEvent;
+        this.collectiveEvent = collectiveEvent;
+        this.training = training;
+        this.players = players;
+    }
+}
+
+export class ClubMatchAddRequest {
+    clubId: number;
+    clubEvent: ClubEvent;
+    collectiveEvent: CollectiveEvent;
+    match: Match;
+    players: number[];
+
+    constructor(clubId: number, clubEvent: ClubEvent, collectiveEvent: CollectiveEvent, match: Match, players: number[]) {
+        this.clubId = clubId;
+        this.clubEvent = clubEvent;
+        this.collectiveEvent = collectiveEvent;
+        this.match = match;
+        this.players = players;
+    }
+}
+
+export class ClubCollectiveEvent {
+    clubEvent: ClubEvent;
+    collectiveEvent: CollectiveEvent;
+
+    constructor(clubEvent: ClubEvent, collectiveEvent: CollectiveEvent) {
+        this.clubEvent = clubEvent;
+        this.collectiveEvent = collectiveEvent;
+    }
+}
+
+export class ClubEvent {
+    id: number | undefined;
+    id_club: number | undefined;
+    id_collective_event: number | undefined;
+    cost: number;
+    profit: number;
+
+    constructor(cost: number, profit: number) {
+        this.cost = cost;
+        this.profit = profit;
+    }
+
+}
+
 export class Application {
     id: number | undefined;
     id_player: number | undefined;

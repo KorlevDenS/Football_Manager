@@ -1,119 +1,98 @@
 import React, {useEffect, useState} from "react";
-import Button from '@mui/material/Button';
 import './MainPage.css';
+import {CollectiveEvent, Human} from "../../db_classes";
+import {EventItem} from "../events/Events";
 
-
-class Client {
-    id: number | undefined;
-    name: string | undefined;
-    email: string | undefined;
+interface MainPageProps {
+    setLoggedIn(isLoggedIn: boolean): void;
 }
 
-export default function MainPage() {
-    const [clients, setClients] = useState([]);
-    const [email, setEmail] = useState("");
+export default function MainPage({setLoggedIn}: MainPageProps) {
 
-    const [form, setForm] = useState({
-        name: '',
-        email: '',
-    });
+    const [human, setHuman] =
+        useState<Human>(new Human("", "", "", new Date(), "", ""));
+    const [events, setEvents] = useState<CollectiveEvent[]>([]);
 
+    useEffect(() => {
+        getHuman().then();
+        let d = new Date();
+        let today = "" + d.getDate() +'.' + (d.getMonth()+1) + '.'+ d.getFullYear();
+        getEventsByTimePeriod(today, today).then();
+    }, []);
 
-    const showTable = async () => {
-        const response = await fetch('/clients');
-        const body = await response.json();
-        console.log(body);
-        setClients(body);
+    const getHuman = async () => {
+        let token = localStorage.getItem("jwtToken");
+        await fetch("/user/get/human", {
+            method: 'POST',
+            headers: {
+                'Authorization': token != null ? token : "",
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            }
+        })
+            .then(response => {
+                    if (response.ok) {
+                        const data = response.json();
+                        let newHuman: Human;
+                        data.then(value => {
+                            newHuman = value as Human
+                        })
+                            .then(() => {
+                                newHuman.birthday = new Date(newHuman.birthday)
+                            })
+                            .then(() => {
+                                setHuman(newHuman);
+                            });
+                    } else if (response.status == 401) {
+                        setLoggedIn(false);
+                        localStorage.setItem("loggedIn", "false");
+                    }
+                }
+            );
     }
 
-    const remove = async (id: number | undefined) => {
-        if (typeof id == undefined) return;
-        const checkId = (clients as Client[]).some(c => c.id === id);
-        if (!checkId) return;
-        await fetch(`/clients/${id}`, {
-            method: 'DELETE',
+    const getEventsByTimePeriod = async (begin: string, end: string) => {
+        let token = localStorage.getItem("jwtToken");
+        await fetch(`/event/get/collective/events/${begin}/${end}`, {
+            method: 'GET',
             headers: {
+                'Authorization': token != null ? token : "",
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             }
-        }).then(() => {
-            let updatedClients = [...(clients as Client[])].filter(i => i.id !== id);
-            setClients(updatedClients as never[]);
-        });
+        })
+            .then( response => {
+                    if (response.ok) {
+                        const data = response.json();
 
+                        let eventsArray: CollectiveEvent[];
+                        data.then(value => {eventsArray = value as CollectiveEvent[]})
+                            .then(() => setEvents(eventsArray));
+                    } else if (response.status === 401) {
+                        setLoggedIn(false);
+                        localStorage.setItem("loggedIn", "false");
+                    }
+                }
+            );
     }
-
-    function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-        setForm({...form, [e.target.name]: e.target.value});
-    }
-
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        console.log(JSON.stringify(form));
-
-        await fetch('/clients', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(form),
-        });
-        await showTable();
-    }
-
-    const findById = async (email : string) => {
-        try {
-            const response = await fetch(`/clients/${email}`, {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(email),
-            });
-
-            const data = await response.json();
-            console.log(data.id + " " + data.name + " " + data.email)
-        } catch (error) {
-            console.log("Couldn't find data with email: " + email);
-        }
-
-    }
-
-    useEffect(() => {
-        showTable();
-    }, []);
 
     return (
-        <div className="App">
-            <header className="App-header">
-                <Button variant="contained" sx={{color: 'black', background: 'aqua'}} className={"mainB"} onClick={showTable}>Show clients list</Button>
+        <div className="MainPage">
+            <div className="me-welcome">
+                Добро пожаловать, <br/> {human.surname} {human.name} {human.patronymic} !
+            </div>
 
-                <input type={"text"} placeholder={"Enter email to find"} required
-                       onChange={(e) => setEmail(e.target.value)}/>
-                <Button type="button" onClick={() => findById(email)}> Show with email</Button>
+            <div>
+                {events.length == 0 && <div className="me-today-info">На сегодня событий не запланировано</div>}
+                {events.length != 0 && <div className="me-today-info">События сегодня:</div>}
+            </div>
 
-
-                <form onSubmit={handleSubmit}>
-                    <input type={"text"} placeholder={"Enter name"} name={"name"} onChange={handleChange}
-                           required={true}/>
-                    <br/>
-                    <input type={"text"} placeholder={"Enter email"} name={"email"} onChange={handleChange}
-                           />
-                    <br/>
-                    <Button type={"submit"}>ADD</Button>
-                </form>
-                <div className="App-intro">
-                    <h2>Clients</h2>
-                    {(clients as Client[]).map(client =>
-                        <div key={client.id}>
-                            {client.id} {client.name} ({client.email}) <button
-                            onClick={() => remove(client.id)}>remove</button>
-                        </div>
-                    )}
-                </div>
-            </header>
+            <div className="me-today-events">
+                {events.map(event =>
+                    <EventItem event={event} loadEventInfo={() => {
+                    }} setLoggedIn={setLoggedIn}/>
+                )}
+            </div>
         </div>
     );
 }
