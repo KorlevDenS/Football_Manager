@@ -1,0 +1,25 @@
+.ClubMainPage {
+    display: flex;
+    flex-direction: column;
+}
+
+.ClubMainPage >* {
+    margin-top: 4%;
+}
+
+.welcome {
+    font-size: x-large;
+    font-weight: bold;
+    color: darkblue;
+}
+
+.today-events {
+    display: flex;
+    flex-direction: row;
+}
+
+.today-info {
+    color: darkgray;
+    font-size: medium;
+    font-weight: bold;
+}
